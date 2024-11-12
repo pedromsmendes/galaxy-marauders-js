@@ -1,15 +1,13 @@
 // @ts-check
 
-import Vec2 from './Vec2.mjs';
+import Vec2 from './vec2.mjs';
 
-class Thing {
-  position = new Vec2(0, 0);
+class Square {
+  position = Vec2.Zero;
 
-  size = new Vec2(0, 0);
+  size = Vec2.Zero;
 
   color = "#ddd";
-
-  speed = 10;
 
   /**
    * @param {Vec2} size
@@ -29,12 +27,7 @@ class Thing {
     this.position.y = y;
   }
 
-  /**
-   * @param {Vec2} inputDirection
-   */
-  Update(inputDirection) {
-    this.position.x += inputDirection.x * this.speed;
-    this.position.y += inputDirection.y * this.speed;
+  Update() {
   }
 
   /**
@@ -48,4 +41,4 @@ class Thing {
   }
 }
 
-export default Thing;
+export default Square;

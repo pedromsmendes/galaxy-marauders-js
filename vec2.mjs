@@ -1,6 +1,14 @@
 // @ts-check
 
 class Vec2 {
+  static get Zero() { return new Vec2(0, 0); }
+  static get One() { return new Vec2(1, 1); }
+
+  static get Up() { return new Vec2(0, 1); }
+  static get Down() { return new Vec2(0, -1); }
+  static get Left() { return new Vec2(-1, 0); }
+  static get Right() { return new Vec2(1, 0); }
+
   x = 0;
   y = 0;
 
@@ -8,7 +16,7 @@ class Vec2 {
    * @param {number} x
    * @param {number} y
    */
-  constructor(x, y) {
+  constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }
@@ -40,22 +48,25 @@ class Vec2 {
    * @returns {Vec2}
    */
   Divide(scalar) {
+    if (scalar === 0) throw new Error("Bro tried to divide by zero, you can't");
+
     this.x /= scalar;
     this.y /= scalar;
 
     return this;
   }
 
-  /**
-   * @returns {number}
-   */
+  /** @returns {number} */
   Length() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
-  /**
-   * @returns {Vec2}
-   */
+  /** @returns {number} */
+  LengthSquared() {
+    return this.x * this.x + this.y * this.y;
+  }
+
+  /** @returns {Vec2} */
   Normalize() {
     const length = this.Length();
 

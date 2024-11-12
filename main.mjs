@@ -1,10 +1,10 @@
 // @ts-check
 
-import Thing from './Thing.mjs';
-import Vec2 from './Vec2.mjs';
+import Game from './game.mjs';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById("canvas"));
 const ctx = canvas.getContext("2d");
+if (!ctx) throw new Error("2d context not supported");
 
 const onResize = () => {
   canvas.width = window.innerWidth;
@@ -12,70 +12,31 @@ const onResize = () => {
 };
 onResize();
 
-const input = {
-  up: false,
-  down: false,
-  left: false,
-  right: false,
-}
-
 window.addEventListener("resize", onResize);
 
-window.addEventListener("keydown", (e) => {
-  if (e.key === "w") input.up = true;
-  if (e.key === "s") input.down = true;
-  if (e.key === "a") input.left = true;
-  if (e.key === "d") input.right = true;
-});
+const game = new Game();
 
-window.addEventListener("keyup", (e) => {
-  if (e.key === "w") input.up = false;
-  if (e.key === "s") input.down = false;
-  if (e.key === "a") input.left = false;
-  if (e.key === "d") input.right = false;
-});
+let lastTime = 0;
 
-const thing = new Thing(new Vec2(100, 100));
-
-const inputDirection = new Vec2(0, 0);
-
-const DealWithInput = () => {
-  inputDirection.x = 0;
-  inputDirection.y = 0;
-
-  if (input.up) {
-    inputDirection.y += -1;
-  }
-  if (input.down) {
-    inputDirection.y += 1;
-  }
-  if (input.left) {
-    inputDirection.x += -1;
-  }
-  if (input.right) {
-    inputDirection.x += 1;
-  }
-
-  inputDirection.Normalize();
-};
-
-// Game loop
-function loop() {
-  if (!ctx) throw new Error("2d context not supported");
+/** @param {number} now */
+const loop = (now) => {
+  const dt = (now - lastTime) / 1000;
+  lastTime = now;
 
   // clear stuff
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = "#000";
   ctx.fillStyle = "#000";
 
-  DealWithInput();
+  game.Update(dt);
 
-  thing.Update(inputDirection);
+  game.Render(ctx);
 
-  thing.Render(ctx);
+  ctx.strokeStyle = "#00f";
+  ctx.strokeRect(500, 0, 1, 500);
 
   requestAnimationFrame(loop);
 }
 
 // Start the game
-loop();
+requestAnimationFrame(loop);
