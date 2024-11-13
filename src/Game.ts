@@ -4,6 +4,7 @@ import Player from './ecs/entities/Player';
 import DashSystem from './ecs/systems/DashSystem';
 import InputManager from './managers/InputManager';
 import EventManager from './managers/EventManager';
+import ShootSystem from './ecs/systems/ShootSystem';
 import HealthSystem from './ecs/systems/HealthSystem';
 import MovementSystem from './ecs/systems/MovementSystem';
 
@@ -21,6 +22,7 @@ class Game {
       new MovementSystem(),
       new HealthSystem(),
       new DashSystem(),
+      new ShootSystem(this),
     );
 
     this.player = new Player();

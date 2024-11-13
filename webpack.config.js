@@ -9,7 +9,6 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 */
 const config = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
-  console.log('🚀 ~ config ~ isDevelopment:', isDevelopment);
 
   return {
     entry: './src/index.ts',

@@ -1,9 +1,10 @@
-
 import Vec2 from '@/utils/Vec2';
 import InputManager from '@/managers/InputManager';
 
 import Entity from '../Entity';
+import ProjectileTest from './ProjectileTest';
 import DashComponent from '../components/DashComponent';
+import ShootComponent from '../components/ShootComponent';
 import HealthComponent from '../components/HealthComponent';
 import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
@@ -20,6 +21,7 @@ class Player extends Entity {
       new VelocityComponent(this),
       new HealthComponent(this, 100),
       new DashComponent(this, 1500, 0.2, 1),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 500),
     )
   }
 
@@ -35,7 +37,7 @@ class Player extends Entity {
       }
     }
 
-    if (!dashComponent.isDashing) {
+    if (!dashComponent?.isDashing) {
       velocityComponent.velocity = Vec2.Zero;
 
       if (InputManager.keydown.w) {
@@ -51,6 +53,13 @@ class Player extends Entity {
         velocityComponent.velocity.x += this.speed;
       }
     }
+
+    const shootComponent = this.GetComponent(ShootComponent);
+    if (shootComponent) {
+      if (InputManager.mouseButtonDown[0]) {
+        shootComponent.Shoot(InputManager.mousePos);
+      }
+    }
   }
 
   public Render(ctx: CanvasRenderingContext2D): void {
@@ -58,7 +67,7 @@ class Player extends Entity {
     if (!positionComponent) return;
 
     ctx.fillStyle = '#0f0';
-    ctx.fillRect(positionComponent.position.x, positionComponent.position.y, 50, 50);
+    ctx.fillRect(positionComponent.position.x, positionComponent.position.y, 100, 100);
   }
 }
 

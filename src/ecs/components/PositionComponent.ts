@@ -1,3 +1,4 @@
+
 import Vec2 from '@/utils/Vec2';
 
 import Entity from '../Entity';

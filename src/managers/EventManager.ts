@@ -7,7 +7,7 @@ export enum Event {
 export type EventCallback = (component: Component) => void;
 
 class EventManager {
-  public static Instance: EventManager | null = null;
+  public static Instance: EventManager;
 
   private events: Map<Event, EventCallback[]> = new Map();
 
@@ -26,12 +26,12 @@ class EventManager {
       this.Instance.events.set(event, []);
     }
 
-    this.Instance.events.get(event).push(callback);
+    this.Instance.events.get(event)?.push(callback);
   }
 
   public static Emit(event: Event, component: Component): void {
     if (this.Instance.events.has(event)) {
-      this.Instance.events.get(event).forEach(callback => callback(component));
+      this.Instance.events.get(event)?.forEach(callback => callback(component));
     }
   }
 }

@@ -7,9 +7,9 @@ import HealthComponent from '../components/HealthComponent';
 class HealthSystem extends System {
   Update(dt: number, entities: Entity[]): void {
     entities.forEach((entity) => {
-      if (!entity.HasComponent(HealthComponent)) return;
-
       const healthComponent = entity.GetComponent(HealthComponent);
+
+      if (!healthComponent) return;
 
       healthComponent.currentHealth -= dt;
 

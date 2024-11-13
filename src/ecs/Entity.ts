@@ -1,9 +1,8 @@
-import Vec2 from '@/utils/Vec2';
 import Component from '@/ecs/Component';
 
-abstract class Entity {
-  private position: Vec2 = Vec2.Zero;
+type ComponentClass<T extends Component = Component> = new (...args: unknown[]) => T;
 
+abstract class Entity {
   private components: Map<Function, Component>;
 
   constructor() {
@@ -21,15 +20,15 @@ abstract class Entity {
     components.forEach(component => this.AddComponent(component));
   }
 
-  public RemoveComponent(componentClass: new (...args: unknown[]) => Component): void {
+  public RemoveComponent(componentClass: ComponentClass): void {
     this.components.delete(componentClass);
   }
 
-  public GetComponent<T extends Component>(componentClass: new (...args: unknown[]) => T): T | undefined {
-    return this.components.get(componentClass) as T;
+  public GetComponent<T extends Component>(componentClass: ComponentClass<T>): T | undefined {
+    return this.components.get(componentClass) as T | undefined;
   }
 
-  public HasComponent(componentClass: new (...args: unknown[]) => Component): boolean {
+  public HasComponent(componentClass: ComponentClass): boolean {
     return this.components.has(componentClass);
   }
 }
