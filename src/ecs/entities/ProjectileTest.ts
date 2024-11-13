@@ -1,8 +1,12 @@
+import Vec2 from '@/utils/Vec2';
+
 import Entity from '../Entity';
 import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
 
 class ProjectileTest extends Entity {
+  private size = new Vec2(10, 10);
+
   constructor() {
     super();
 
@@ -19,8 +23,18 @@ class ProjectileTest extends Entity {
     const positionComponent = this.GetComponent(PositionComponent);
     if (!positionComponent) return;
 
-    ctx.fillStyle = '#ff0';
-    ctx.fillRect(positionComponent.position.x, positionComponent.position.y, 10, 20);
+    ctx.strokeStyle = '#f00';
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(
+      positionComponent.position.x,
+      positionComponent.position.y,
+      this.size.x,
+      0,
+      2 * Math.PI,
+    )
+    ctx.stroke();
+    ctx.fill();
   }
 }
 

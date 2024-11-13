@@ -27,7 +27,7 @@ class DashSystem extends System {
         if (dashComponent.dashTimeRemaining <= 0) {
           dashComponent.EndDash();
         } else {
-          velComponent.velocity = dashComponent.direction.Clone().Normalize().Multiply(dashComponent.dashSpeed);
+          velComponent.velocity = dashComponent.direction.Clone().Normalize().Multiply(dashComponent.speed);
         }
       }
     });

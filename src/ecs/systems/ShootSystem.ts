@@ -19,9 +19,12 @@ class ShootSystem extends System {
       if (!shootComponent || !posComponent) return;
 
 
-      if (shootComponent.isShooting) {
-        shootComponent.isShooting = false;
+      shootComponent.TickCooldown(dt);
 
+      if (shootComponent.isShooting) {
+        shootComponent.EndShoot();
+
+        // instantiating a new projectile like this feels weird, could need params
         const projectile = new shootComponent.projectile();
 
         const projectilePosComponent = projectile.GetComponent(PositionComponent);

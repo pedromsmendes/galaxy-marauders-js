@@ -16,23 +16,51 @@ class ShootComponent extends Component {
 
   public direction: Vec2;
 
+  public cooldown: number;
+
+  public cooldownRemaining: number = 0;
+
   /**
    * @param entity
    * @param shootOrigin Should be the vector2 relative to the Entity position
    * @param projectile What entity (projectile) to shoot. Should it use its own HitboxComponent?
    * @param projectileSpeed Speed of the projectile
    */
-  constructor(entity: Entity, shootOrigin: Vec2, projectile: EntityClass, projectileSpeed: number) {
+  constructor(
+    entity: Entity,
+    shootOrigin: Vec2,
+    projectile: EntityClass,
+    projectileSpeed: number,
+    cooldown: number,
+  ) {
     super(entity);
 
     this.shootOrigin = shootOrigin;
     this.projectile = projectile;
     this.projectileSpeed = projectileSpeed;
+    this.cooldown = cooldown;
   }
 
   public Shoot(direction: Vec2): void {
+    if (!this.CanShoot()) return;
+
     this.isShooting = true;
     this.direction = direction;
+  }
+
+  public CanShoot() {
+    return !this.isShooting && this.cooldownRemaining <= 0;
+  }
+
+  public EndShoot() {
+    this.isShooting = false;
+    this.cooldownRemaining = this.cooldown;
+  }
+
+  public TickCooldown(dt: number) {
+    if (this.cooldownRemaining > 0) {
+      this.cooldownRemaining -= dt;
+    }
   }
 }
 

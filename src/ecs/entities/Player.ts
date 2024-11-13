@@ -13,15 +13,17 @@ class Player extends Entity {
   /** px/sec */
   private speed = 500;
 
+  private size = new Vec2(100, 100);
+
   constructor() {
     super();
 
     this.AddComponents(
-      new PositionComponent(this),
+      new PositionComponent(this, new Vec2(300, 300)),
       new VelocityComponent(this),
       new HealthComponent(this, 100),
-      new DashComponent(this, 1500, 0.2, 1),
-      new ShootComponent(this, Vec2.Zero, ProjectileTest, 500),
+      new DashComponent(this, 1800, 0.2, 0.8),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1000, 0.2),
     )
   }
 
@@ -67,7 +69,25 @@ class Player extends Entity {
     if (!positionComponent) return;
 
     ctx.fillStyle = '#0f0';
-    ctx.fillRect(positionComponent.position.x, positionComponent.position.y, 100, 100);
+    ctx.fillRect(
+      positionComponent.position.x - this.size.x / 2,
+      positionComponent.position.y - this.size.y / 2,
+      this.size.x,
+      this.size.y,
+    );
+
+    // debugging the center of the object
+    if (process.env.NODE_ENV === 'development') {
+      ctx.beginPath();
+      ctx.moveTo(positionComponent.position.x, positionComponent.position.y - this.size.y / 2);
+      ctx.lineTo(positionComponent.position.x, positionComponent.position.y + this.size.y / 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(positionComponent.position.x - this.size.x / 2, positionComponent.position.y);
+      ctx.lineTo(positionComponent.position.x + this.size.x / 2, positionComponent.position.y);
+      ctx.stroke();
+    }
   }
 }
 
