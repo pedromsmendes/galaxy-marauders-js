@@ -1,0 +1,35 @@
+{
+  "name": "vanilla-test",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "errors:lint": "eslint src --fix",
+    "errors:tsc": "tsc --noEmit",
+    "errors": "clear && npm run errors:tsc && npm run errors:lint",
+    "build:clear": "rm -rf dist",
+    "build:webpack": "webpack --mode production",
+    "build": "npm run build:clear && npm run build:webpack",
+    "dev": "webpack serve --mode development"
+  },
+  "keywords": [],
+  "author": "pedromsmendes",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.14.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-perfectionist": "^3.9.1",
+    "globals": "^15.12.0",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.14.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  }
+}

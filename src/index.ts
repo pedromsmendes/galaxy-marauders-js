@@ -1,8 +1,6 @@
-// @ts-check
+import Game from './Game';
 
-import Game from './game.mjs';
-
-const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById("canvas"));
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("2d context not supported");
 
@@ -18,8 +16,7 @@ const game = new Game();
 
 let lastTime = 0;
 
-/** @param {number} now */
-const loop = (now) => {
+const loop = (now: number) => {
   const dt = (now - lastTime) / 1000;
   lastTime = now;
 
@@ -31,9 +28,6 @@ const loop = (now) => {
   game.Update(dt);
 
   game.Render(ctx);
-
-  ctx.strokeStyle = "#00f";
-  ctx.strokeRect(500, 0, 1, 500);
 
   requestAnimationFrame(loop);
 }
