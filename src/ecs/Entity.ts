@@ -1,12 +1,20 @@
 import Component from '@/ecs/Component';
 
-type ComponentClass<T extends Component = Component> = new (...args: unknown[]) => T;
+import type { ComponentClass } from './types';
 
 abstract class Entity {
+  private static LATEST_ID = 0;
+  private static get NewId() { return ++Entity.LATEST_ID; }
+
+  public static get LatestId() { return Entity.LATEST_ID; }
+
   private components: Map<Function, Component>;
+
+  public readonly ID: number;
 
   constructor() {
     this.components = new Map();
+    this.ID = Entity.NewId;
   }
 
   public abstract Update(dt: number): void;
