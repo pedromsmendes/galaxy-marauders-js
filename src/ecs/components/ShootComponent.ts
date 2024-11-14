@@ -1,9 +1,9 @@
 import Vec2 from '@/utils/Vec2';
 
+import type { EntityClass } from '../types';
+
 import Entity from '../Entity';
 import Component from '../Component';
-
-type EntityClass = new (...args: unknown[]) => Entity;
 
 class ShootComponent extends Component {
   public shootOrigin: Vec2;

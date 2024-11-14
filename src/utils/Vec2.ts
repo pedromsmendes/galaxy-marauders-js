@@ -68,6 +68,10 @@ class Vec2 {
   public Equals(other: Vec2) {
     return other.x === this.x && other.y === this.y;
   }
+
+  public ToString(): string {
+    return `{x=${this.x},y=${this.y}}`;
+  }
 }
 
 export default Vec2;

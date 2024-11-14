@@ -1,5 +1,3 @@
-import EventManager, { Event } from '@/managers/EventManager';
-
 import Entity from '../Entity';
 import System from '../System';
 import HealthComponent from '../components/HealthComponent';
@@ -16,7 +14,7 @@ class HealthSystem extends System {
       if (healthComponent.currentHealth <= 0) {
         healthComponent.currentHealth = 0;
 
-        EventManager.Emit(Event.EntityDeath, healthComponent);
+        // EventManager.Emit(Event.EntityDeath, healthComponent);
       }
     });
   }

@@ -12,6 +12,8 @@ abstract class Entity {
 
   public readonly ID: number;
 
+  public broIsColliding = false;
+
   constructor() {
     this.components = new Map();
     this.ID = Entity.NewId;
