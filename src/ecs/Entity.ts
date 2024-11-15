@@ -26,7 +26,9 @@ abstract class Entity {
   }
 
   public AddComponents(...components: Component[]) {
-    components.forEach(component => this.AddComponent(component));
+    for (const component of components) {
+      this.AddComponent(component);
+    }
   }
 
   public RemoveComponent(componentClass: ComponentClass): void {

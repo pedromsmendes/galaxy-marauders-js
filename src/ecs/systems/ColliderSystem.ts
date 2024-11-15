@@ -26,11 +26,11 @@ class ColliderSystem extends System {
 
     const validEntities: Entity[] = [];
 
-    entities.forEach(entity => {
+    for (const entity of entities) {
       const position = entity.GetComponent(PositionComponent)?.position;
       const collider = entity.GetComponent(ColliderComponent);
 
-      if (!position || !collider) return;
+      if (!position || !collider) continue;
 
       collider.previousCollisions = collider.currentCollisions;
       collider.currentCollisions = [];
@@ -38,69 +38,69 @@ class ColliderSystem extends System {
       this.FillGrid(entity, collider, position);
 
       validEntities.push(entity);
-    });
+    }
 
-    validEntities.forEach((entity) => {
+    for (const entity of validEntities) {
       const position = entity.GetComponent(PositionComponent)!.position;
       const collider = entity.GetComponent(ColliderComponent)!;
 
       const neighbours = this.GetNeighbours(collider, position);
 
-      neighbours.forEach((neighbour) => {
-        const bounds = this.GetBounds(collider, position);
-        const neighbourCollider = neighbour.GetComponent(ColliderComponent)!;
-        const neighbourBounds = this.GetBounds(neighbourCollider, neighbour.GetComponent(PositionComponent)!.position)
+      for (const neighbour of neighbours) {
+      const bounds = this.GetBounds(collider, position);
+      const neighbourCollider = neighbour.GetComponent(ColliderComponent)!;
+      const neighbourBounds = this.GetBounds(neighbourCollider, neighbour.GetComponent(PositionComponent)!.position);
 
-        if ((collider.masks & neighbourCollider.layers) === 0 || (neighbourCollider.masks & collider.layers) === 0) {
-          return;
-        }
+      if ((collider.masks & neighbourCollider.layers) === 0 || (neighbourCollider.masks & collider.layers) === 0) {
+        continue;
+      }
 
-        const collisionInfo = this.GetCollision(bounds, neighbourBounds);
+      const collisionInfo = this.GetCollision(bounds, neighbourBounds);
 
-        if (collisionInfo) {
-          collider.currentCollisions.push({
-            collider: neighbourCollider,
-            depth: collisionInfo.depth,
-            normal: collisionInfo.normal,
-          });
-        }
-      });
+      if (collisionInfo) {
+        collider.currentCollisions.push({
+        collider: neighbourCollider,
+        depth: collisionInfo.depth,
+        normal: collisionInfo.normal,
+        });
+      }
+      }
 
       const enteredCollisions = collider.currentCollisions.filter((c) => (
-        !collider.previousCollisions.find((previous) => previous.collider.entity.ID === c.collider.entity.ID)
+      !collider.previousCollisions.find((previous) => previous.collider.entity.ID === c.collider.entity.ID)
       ));
       const exitedCollisions = collider.previousCollisions.filter((c) => (
-        !collider.currentCollisions.find((current) => current.collider.entity.ID === c.collider.entity.ID)
+      !collider.currentCollisions.find((current) => current.collider.entity.ID === c.collider.entity.ID)
       ));
 
-      const velocity = entity.GetComponent(VelocityComponent)?.velocity
+      const velocity = entity.GetComponent(VelocityComponent)?.velocity;
 
-      enteredCollisions.forEach((collision) => {
-        collider.OnCollisionEnter(collision);
+      for (const collision of enteredCollisions) {
+      collider.OnCollisionEnter(collision);
 
-        // messily prototyping fake physics on collision
-        if (!velocity) return;
+      // messily prototyping fake physics on collision
+      if (!velocity) continue;
 
-        const otherEntity = collision.collider.entity;
-        const otherPosition = otherEntity.GetComponent(PositionComponent);
+      const otherEntity = collision.collider.entity;
+      const otherPosition = otherEntity.GetComponent(PositionComponent);
 
-        if (!otherPosition) return;
+      if (!otherPosition) continue;
 
-        position.Add(collision.normal);
+      position.Add(collision.normal);
 
-        // very very rudimentary
-        if (collision.normal.x !== 0) {
-          velocity.x *= -1;
-        }
-        if (collision.normal.y !== 0) {
-          velocity.y *= -1;
-        }
-      });
+      // very very rudimentary
+      if (collision.normal.x !== 0) {
+        velocity.x *= -1;
+      }
+      if (collision.normal.y !== 0) {
+        velocity.y *= -1;
+      }
+      }
 
-      exitedCollisions.forEach((otherCollider) => {
-        collider.OnCollisionExit(otherCollider);
-      });
-    });
+      for (const otherCollider of exitedCollisions) {
+      collider.OnCollisionExit(otherCollider);
+      }
+    }
   }
 
   private FillGrid(entity: Entity, collider: ColliderComponent, pos: Vec2): void {

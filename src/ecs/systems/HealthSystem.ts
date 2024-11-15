@@ -4,19 +4,19 @@ import HealthComponent from '../components/HealthComponent';
 
 class HealthSystem extends System {
   Update(dt: number, entities: Entity[]): void {
-    entities.forEach((entity) => {
+    for (const entity of entities) {
       const healthComponent = entity.GetComponent(HealthComponent);
 
-      if (!healthComponent) return;
+      if (!healthComponent) continue;
 
       healthComponent.currentHealth -= dt;
 
       if (healthComponent.currentHealth <= 0) {
-        healthComponent.currentHealth = 0;
+      healthComponent.currentHealth = 0;
 
-        // EventManager.Emit(Event.EntityDeath, healthComponent);
+      // EventManager.Emit(Event.EntityDeath, healthComponent);
       }
-    });
+    }
   }
 }
 

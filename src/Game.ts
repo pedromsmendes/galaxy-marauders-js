@@ -10,7 +10,6 @@ import ShootSystem from './ecs/systems/ShootSystem';
 import HealthSystem from './ecs/systems/HealthSystem';
 import ColliderSystem from './ecs/systems/ColliderSystem';
 import MovementSystem from './ecs/systems/MovementSystem';
-import ConfinmentSystem from './ecs/systems/ConfinmentSystem';
 
 class Game {
   private systems: System[] = [];
@@ -27,11 +26,10 @@ class Game {
       new DashSystem(),
       new ShootSystem(this),
       new ColliderSystem(200),
-      new ConfinmentSystem(),
     );
 
     for (let i = 0; i < 500; i++) {
-      const randomSize = new Vec2(randRangeInt(15, 15), randRangeInt(15, 15));
+      const randomSize = new Vec2(randRangeInt(20, 20), randRangeInt(20, 20));
 
       const randomPos = new Vec2(
         randRangeInt(randomSize.x / 2, window.innerWidth - randomSize.x / 2),
@@ -56,15 +54,21 @@ class Game {
   }
 
   Update(dt: number): void {
-    this.entities.forEach(entity => entity.Update(dt));
-    this.systems.forEach(system => system.Update(dt, this.entities));
+    for (const entity of this.entities) {
+      entity.Update(dt);
+    }
+    for (const system of this.systems) {
+      system.Update(dt, this.entities);
+    }
   }
 
   Render(ctx: CanvasRenderingContext2D): void {
     // debuggy
     // colliderSystem.Render(ctx);
 
-    this.entities.forEach(entity => entity.Render(ctx));
+    for (const entity of this.entities) {
+      entity.Render(ctx);
+    }
   }
 }
 

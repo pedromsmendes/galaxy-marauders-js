@@ -10,7 +10,7 @@ export enum Layers {
   PlayerProjectile = 1 << 1,
 
   Enemy = 1 << 2,
-  EnemyProjectile = 1 << 3,
+  EnemyProjectile = 1 << 3
 }
 
 class ColliderComponent extends Component {
