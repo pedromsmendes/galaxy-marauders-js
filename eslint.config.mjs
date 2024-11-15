@@ -1,7 +1,6 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-// import importPlugin from 'eslint-plugin-import';
 import perfectionist from 'eslint-plugin-perfectionist'
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -23,30 +22,7 @@ export default [
       perfectionist,
     },
     rules: {
-      // "import/order": [
-      //   "error",
-      //   {
-      //     "newlines-between": "always",
-      //     "alphabetize": {
-      //       "order": "ignore"
-      //     },
-      //     "pathGroups": [
-      //       {
-      //         "pattern": "@/**",
-      //         "group": "internal"
-      //       }
-      //     ],
-      //     "groups": [
-      //       "builtin",
-      //       "external",
-      //       "internal",
-      //       "parent",
-      //       "sibling",
-      //       "index",
-      //       "object"
-      //     ]
-      //   }
-      // ],
+      "no-console": ["warn", { allow: ["info"] }],
       "@typescript-eslint/no-unsafe-function-type": 0,
       "perfectionist/sort-imports": [
         "error",
