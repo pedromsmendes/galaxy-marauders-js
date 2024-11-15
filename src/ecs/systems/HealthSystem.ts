@@ -3,7 +3,7 @@ import System from '../System';
 import HealthComponent from '../components/HealthComponent';
 
 class HealthSystem extends System {
-  Update(dt: number, entities: Entity[]): void {
+  public override Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const healthComponent = entity.GetComponent(HealthComponent);
 

@@ -6,7 +6,7 @@ import ColliderComponent from '../components/ColliderComponent';
 import ConfinmentComponent from '../components/ConfinmentComponent';
 
 class ConfinmentSystem extends System {
-  public Update(dt: number, entities: Entity[]): void {
+  public override Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const position = entity.GetComponent(PositionComponent)?.position;
       const confinment = entity.GetComponent(ConfinmentComponent);

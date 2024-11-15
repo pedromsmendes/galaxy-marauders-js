@@ -7,7 +7,7 @@ import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
 
 class DashSystem extends System {
-  Update(dt: number, entities: Entity[]): void {
+  public override  Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const dashComponent = entity.GetComponent(DashComponent);
       const velComponent = entity.GetComponent(VelocityComponent);
@@ -18,17 +18,17 @@ class DashSystem extends System {
       dashComponent.TickCooldown(dt);
 
       if (!velComponent.velocity.Equals(Vec2.Zero)) {
-      dashComponent.lastDirection = velComponent.velocity;
+        dashComponent.lastDirection = velComponent.velocity;
       }
 
       if (dashComponent.isDashing) {
-      dashComponent.dashTimeRemaining -= dt;
+        dashComponent.dashTimeRemaining -= dt;
 
-      if (dashComponent.dashTimeRemaining <= 0) {
-        dashComponent.EndDash();
-      } else {
-        velComponent.velocity = dashComponent.direction.Clone().Normalize().Multiply(dashComponent.speed);
-      }
+        if (dashComponent.dashTimeRemaining <= 0) {
+          dashComponent.EndDash();
+        } else {
+          velComponent.velocity = dashComponent.direction.Clone().Normalize().Multiply(dashComponent.speed);
+        }
       }
     }
   }

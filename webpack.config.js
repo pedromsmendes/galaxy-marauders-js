@@ -40,7 +40,7 @@ const config = (env, argv) => {
         },
         // Asset Loaders (images, fonts, etc.)
         {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          test: /\.(png|svg|jpe?g|gif)$/i,
           type: 'asset/resource',
         },
       ],

@@ -18,8 +18,8 @@ abstract class Entity {
     this.ID = Entity.NewId;
   }
 
-  public abstract Update(dt: number): void;
-  public abstract Render(ctx: CanvasRenderingContext2D): void;
+  public Update(_dt: number): void { };
+  public Render(): void { };
 
   public AddComponent(component: Component): void {
     this.components.set(component.constructor, component);

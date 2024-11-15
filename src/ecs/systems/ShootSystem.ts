@@ -11,7 +11,7 @@ class ShootSystem extends System {
     super();
   }
 
-  Update(dt: number, entities: Entity[]): void {
+  public override Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const shootComponent = entity.GetComponent(ShootComponent);
       const posComponent = entity.GetComponent(PositionComponent);
@@ -21,25 +21,25 @@ class ShootSystem extends System {
       shootComponent.TickCooldown(dt);
 
       if (shootComponent.isShooting) {
-      shootComponent.EndShoot();
+        shootComponent.EndShoot();
 
-      // instantiating a new projectile like this feels weird, could need params
-      const projectile = new shootComponent.projectile();
+        // instantiating a new projectile like this feels weird, could need params
+        const projectile = new shootComponent.projectile();
 
-      const projectilePosComponent = projectile.GetComponent(PositionComponent);
-      const projectileVelComponent = projectile.GetComponent(VelocityComponent);
+        const projectilePosComponent = projectile.GetComponent(PositionComponent);
+        const projectileVelComponent = projectile.GetComponent(VelocityComponent);
 
-      if (!projectilePosComponent || !projectileVelComponent) return;
+        if (!projectilePosComponent || !projectileVelComponent) return;
 
-      /** A vector from the position of the entity to the {@link ShootComponent.shootOrigin} */
-      const originPos = posComponent.position.Clone().Add(shootComponent.shootOrigin);
+        /** A vector from the position of the entity to the {@link ShootComponent.shootOrigin} */
+        const originPos = posComponent.position.Clone().Add(shootComponent.shootOrigin);
 
-      projectilePosComponent.position = originPos;
+        projectilePosComponent.position = originPos;
 
-      projectileVelComponent.velocity =
-        originPos.Direction(shootComponent.direction).Normalize().Multiply(shootComponent.projectileSpeed);
+        projectileVelComponent.velocity =
+          originPos.Direction(shootComponent.direction).Normalize().Multiply(shootComponent.projectileSpeed);
 
-      this.game.AddEntity(projectile);
+        this.game.AddEntity(projectile);
       }
     }
   }

@@ -12,7 +12,7 @@ onResize();
 
 window.addEventListener("resize", onResize);
 
-const game = new Game();
+const game = new Game(ctx);
 
 let lastTime = 0;
 
@@ -27,7 +27,7 @@ const loop = (now: number) => {
 
   game.Update(dt);
 
-  game.Render(ctx);
+  game.Render();
 
   requestAnimationFrame(loop);
 }

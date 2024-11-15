@@ -1,7 +1,8 @@
 import Entity from '@/ecs/Entity';
 
 abstract class System {
-  public abstract Update(dt: number, entities: Entity[]): void;
+  public Render(_entities: Entity[]): void { }
+  public Update(_dt: number, _entities: Entity[]): void { }
 }
 
 export default System;

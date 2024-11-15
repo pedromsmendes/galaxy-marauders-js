@@ -1,13 +1,15 @@
-import Rect from './Rect';
 import Vec2 from './utils/Vec2';
 import Entity from './ecs/Entity';
 import System from './ecs/System';
-import Player from './ecs/entities/Player';
-import { randRangeInt } from './utils/random';
+import Enemy from './entities/Enemy';
+import Player from './entities/Player';
 import DashSystem from './ecs/systems/DashSystem';
 import InputManager from './managers/InputManager';
+import AssetManager from './managers/AssetManager';
 import ShootSystem from './ecs/systems/ShootSystem';
+import CanvasManager from './managers/CanvasManager';
 import HealthSystem from './ecs/systems/HealthSystem';
+import SpriteSystem from './ecs/systems/SpriteSystem';
 import ColliderSystem from './ecs/systems/ColliderSystem';
 import MovementSystem from './ecs/systems/MovementSystem';
 
@@ -17,36 +19,30 @@ class Game {
 
   public player: Player;
 
-  constructor() {
-    new InputManager();
+  constructor(ctx: CanvasRenderingContext2D) {
+    const assetManager = new AssetManager();
 
-    this.systems.push(
-      new MovementSystem(),
-      new HealthSystem(),
-      new DashSystem(),
-      new ShootSystem(this),
-      new ColliderSystem(200),
-    );
+    assetManager.LoadAssets()
+      .then(() => {
+        new InputManager();
+        new CanvasManager(ctx);
 
-    for (let i = 0; i < 500; i++) {
-      const randomSize = new Vec2(randRangeInt(20, 20), randRangeInt(20, 20));
+        this.systems.push(
+          new MovementSystem(),
+          new HealthSystem(),
+          new DashSystem(),
+          new ShootSystem(this),
+          new ColliderSystem(200),
+          new SpriteSystem(),
+        );
 
-      const randomPos = new Vec2(
-        randRangeInt(randomSize.x / 2, window.innerWidth - randomSize.x / 2),
-        randRangeInt(randomSize.y / 2, window.innerHeight - randomSize.y / 2),
-      );
+        this.player = new Player();
+        this.AddEntity(this.player)
 
-      const randomColor = [
-        "green",
-        "blue",
-        "yellow",
-        "red",
-        "purple",
-        "orange",
-      ][randRangeInt(0, 5)];
-
-      this.AddEntity(new Rect(randomPos, randomSize, randomColor));
-    }
+        for (let i = 0; i < 9; i++) {
+          this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 50)))
+        }
+      })
   }
 
   AddEntity(entity: Entity) {
@@ -62,12 +58,12 @@ class Game {
     }
   }
 
-  Render(ctx: CanvasRenderingContext2D): void {
-    // debuggy
-    // colliderSystem.Render(ctx);
-
+  Render(): void {
     for (const entity of this.entities) {
-      entity.Render(ctx);
+      entity.Render();
+    }
+    for (const system of this.systems) {
+      system.Render(this.entities);
     }
   }
 }

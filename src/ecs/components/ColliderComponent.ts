@@ -32,7 +32,8 @@ class ColliderComponent extends Component {
   }
 
   // we need some sort of event system
-  public OnCollisionEnter(_collision: Collision): void {
+  public OnCollisionEnter(collision: Collision): void {
+    console.log(`${this.entity.constructor.name} with ID: ${this.entity.ID} has collided with ${collision.collider.entity.constructor.name} with ID: ${collision.collider.entity.ID}`);
   }
 
   public OnCollisionExit(_collision: Collision): void {

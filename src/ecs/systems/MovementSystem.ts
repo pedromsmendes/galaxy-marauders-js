@@ -4,7 +4,7 @@ import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
 
 class MovementSystem extends System {
-  Update(dt: number, entities: Entity[]): void {
+  public override Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const posComponent = entity.GetComponent(PositionComponent);
       const velComponent = entity.GetComponent(VelocityComponent);

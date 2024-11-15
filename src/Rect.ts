@@ -1,6 +1,7 @@
 import Vec2 from './utils/Vec2';
 import Entity from './ecs/Entity';
 import InputManager from './managers/InputManager';
+import CanvasManager from './managers/CanvasManager';
 import { randRangeFloat, randRangeInt } from './utils/random';
 import PositionComponent from './ecs/components/PositionComponent';
 import VelocityComponent from './ecs/components/VelocityComponent';
@@ -51,7 +52,7 @@ class Rect extends Entity {
     );
   }
 
-  public Update(_dt: number): void {
+  public override Update(_dt: number): void {
     const velocityComponent = this.GetComponent(VelocityComponent);
 
     if (!velocityComponent) return;
@@ -74,7 +75,9 @@ class Rect extends Entity {
     }
   }
 
-  public Render(ctx: CanvasRenderingContext2D): void {
+  public override Render(): void {
+    const ctx = CanvasManager.ctx;
+
     const posCompontent = this.GetComponent(PositionComponent);
     if (!posCompontent) return;
 
