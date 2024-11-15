@@ -12,9 +12,9 @@ class HealthSystem extends System {
       healthComponent.currentHealth -= dt;
 
       if (healthComponent.currentHealth <= 0) {
-      healthComponent.currentHealth = 0;
+        healthComponent.currentHealth = 0;
 
-      // EventManager.Emit(Event.EntityDeath, healthComponent);
+        healthComponent.OnDeath.Emit();
       }
     }
   }

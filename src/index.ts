@@ -12,7 +12,13 @@ onResize();
 
 window.addEventListener("resize", onResize);
 
-const game = new Game(ctx);
+// this is messy, sending the function to the game cause
+// the assets are being loaded in a promise, so we need to start after
+const initGame = () => {
+  requestAnimationFrame(loop);
+};
+
+const game = new Game(ctx, initGame);
 
 let lastTime = 0;
 
@@ -31,6 +37,3 @@ const loop = (now: number) => {
 
   requestAnimationFrame(loop);
 }
-
-// Start the game
-requestAnimationFrame(loop);

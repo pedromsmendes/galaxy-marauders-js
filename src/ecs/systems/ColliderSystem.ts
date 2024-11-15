@@ -72,16 +72,12 @@ class ColliderSystem extends System {
         !collider.currentCollisions.find((current) => current.collider.entity.ID === c.collider.entity.ID)
       ));
 
-      // const velocity = entity.GetComponent(VelocityComponent)?.velocity;
-
       for (const collision of enteredCollisions) {
-        collider.OnCollisionEnter(collision);
-
-        // if (velocity) this.DoFakeCollisionPhysicsBull(collision, position, velocity);
+        collider.OnCollisionEnter.Emit(collision);
       }
 
-      for (const otherCollider of exitedCollisions) {
-        collider.OnCollisionExit(otherCollider);
+      for (const otherCollision of exitedCollisions) {
+        collider.OnCollisionExit.Emit(otherCollision);
       }
     }
   }
@@ -176,13 +172,13 @@ class ColliderSystem extends System {
         ctx.strokeStyle = "blue";
         ctx.strokeRect(x, y, this.cellSize, this.cellSize);
 
-        // const centerOfTheRect = this.GetCell(x + this.cellSize / 2, y + this.cellSize / 2).ToString();
-        // const content = this.grid.get(centerOfTheRect);
+        const centerOfTheRect = this.GetCell(x + this.cellSize / 2, y + this.cellSize / 2).ToString();
+        const content = this.grid.get(centerOfTheRect);
 
-        // if (content?.length) {
-        //   ctx.fillStyle = "#ff902230";
-        //   ctx.fillRect(x, y, this.cellSize, this.cellSize)
-        // }
+        if (content?.length) {
+          ctx.fillStyle = "#ff902230";
+          ctx.fillRect(x, y, this.cellSize, this.cellSize)
+        }
       }
     }
 

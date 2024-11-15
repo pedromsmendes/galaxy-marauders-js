@@ -16,7 +16,7 @@ class ProjectileTest extends Entity {
       new VelocityComponent(this),
       new ColliderComponent(
         this,
-        this.size,
+        this.size.Clone().Multiply(2),
         Layers.PlayerProjectile,
         Layers.Enemy,
       ),
@@ -29,17 +29,13 @@ class ProjectileTest extends Entity {
     const positionComponent = this.GetComponent(PositionComponent);
     if (!positionComponent) return;
 
-    ctx.strokeStyle = '#f00';
     ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(
-      positionComponent.position.x,
-      positionComponent.position.y,
+    ctx.fillRect(
+      positionComponent.position.x - this.size.x / 2,
+      positionComponent.position.y - this.size.y / 2,
       this.size.x,
-      0,
-      2 * Math.PI,
+      this.size.y,
     )
-    ctx.stroke();
     ctx.fill();
   }
 }

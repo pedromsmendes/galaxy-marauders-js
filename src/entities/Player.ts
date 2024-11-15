@@ -21,16 +21,16 @@ class Player extends Entity {
     this.AddComponents(
       new PositionComponent(this, new Vec2(window.innerWidth / 2, window.innerHeight - 100)),
       new VelocityComponent(this),
-      new HealthComponent(this, 100),
-      new DashComponent(this, 1800, 0.2, 0.8),
-      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1000, 0.2),
-      new SpriteComponent(this, 'Ship'),
       new ColliderComponent(
         this,
         new Vec2(100, 84),
         Layers.Player,
         Layers.Enemy | Layers.EnemyProjectile,
       ),
+      new HealthComponent(this, 100),
+      new DashComponent(this, 1800, 0.2, 0.8),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 60, 0.1),
+      new SpriteComponent(this, 'Ship'),
     );
   }
 

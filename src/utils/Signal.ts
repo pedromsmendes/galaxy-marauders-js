@@ -1,6 +1,6 @@
 type Handler<T> = (data: T) => void;
 
-class Signal<T> {
+class Signal<T = void> {
   private handlers: Set<Handler<T>> = new Set();
 
   public Connect(handler: Handler<T>) {

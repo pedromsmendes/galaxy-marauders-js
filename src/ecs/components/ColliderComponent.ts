@@ -1,5 +1,5 @@
 import Vec2 from '@/utils/Vec2';
-import Signal from '@/utils/Event';
+import Signal from '@/utils/Signal';
 
 import type { Collision } from '../types';
 
@@ -23,6 +23,7 @@ class ColliderComponent extends Component {
   public previousCollisions: Collision[] = [];
 
   public OnCollisionEnter = new Signal<Collision>;
+  public OnCollisionExit = new Signal<Collision>;
 
   constructor(parent: Entity, size: Vec2, layers: Layers, masks: Layers) {
     super(parent);
@@ -31,13 +32,6 @@ class ColliderComponent extends Component {
     this.layers = layers;
     this.masks = masks;
   }
-
-  // public OnCollisionEnter(_collision: Collision): void {
-  // console.log(`${this.entity.constructor.name} with ID: ${this.entity.ID} has collided with ${collision.collider.entity.constructor.name} with ID: ${collision.collider.entity.ID}`);
-  // }
-
-  // public OnCollisionExit(_collision: Collision): void {
-  // }
 }
 
 export default ColliderComponent;

@@ -10,8 +10,12 @@ import ShootSystem from './ecs/systems/ShootSystem';
 import CanvasManager from './managers/CanvasManager';
 import HealthSystem from './ecs/systems/HealthSystem';
 import SpriteSystem from './ecs/systems/SpriteSystem';
+import ProjectileTest from './entities/ProjectileTest';
 import ColliderSystem from './ecs/systems/ColliderSystem';
 import MovementSystem from './ecs/systems/MovementSystem';
+import PositionComponent from './ecs/components/PositionComponent';
+
+let projectile: ProjectileTest;
 
 class Game {
   private systems: System[] = [];
@@ -19,7 +23,7 @@ class Game {
 
   public player: Player;
 
-  constructor(ctx: CanvasRenderingContext2D) {
+  constructor(ctx: CanvasRenderingContext2D, startGame: Function) {
     const assetManager = new AssetManager();
 
     assetManager.LoadAssets()
@@ -39,9 +43,14 @@ class Game {
         this.player = new Player();
         this.AddEntity(this.player)
 
-        for (let i = 0; i < 9; i++) {
+        projectile = new ProjectileTest();
+        this.AddEntity(projectile);
+
+        for (let i = 0; i < 4; i++) {
           this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 50)))
         }
+
+        startGame();
       })
   }
 
@@ -50,6 +59,8 @@ class Game {
   }
 
   Update(dt: number): void {
+    projectile.GetComponent(PositionComponent)!.position = InputManager.mousePos;
+
     for (const entity of this.entities) {
       entity.Update(dt);
     }

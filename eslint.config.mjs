@@ -22,7 +22,7 @@ export default [
       perfectionist,
     },
     rules: {
-      "no-console": ["warn", { allow: ["info"] }],
+      "no-console": ["warn", { allow: ["info", "error"] }],
       "@typescript-eslint/no-unsafe-function-type": 0,
       "perfectionist/sort-imports": [
         "error",
