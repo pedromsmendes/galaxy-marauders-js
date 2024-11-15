@@ -1,11 +1,12 @@
 import Vec2 from '@/utils/Vec2';
 
-import type { Bounds } from '../types';
+import type { Bounds, Collision } from '../types';
 
 import Entity from '../Entity';
 import System from '../System';
 import PositionComponent from '../components/PositionComponent';
 import ColliderComponent from '../components/ColliderComponent';
+import VelocityComponent from '../components/VelocityComponent';
 
 class ColliderSystem extends System {
   private cellSize: number;
@@ -50,21 +51,50 @@ class ColliderSystem extends System {
         const neighbourCollider = neighbour.GetComponent(ColliderComponent)!;
         const neighbourBounds = this.GetBounds(neighbourCollider, neighbour.GetComponent(PositionComponent)!.position)
 
-        if (this.Intersects(bounds, neighbourBounds)
-          && !((collider.masks & neighbourCollider.layers) === 0 || (neighbourCollider.masks & collider.layers) === 0)) {
-          collider.currentCollisions.push(neighbourCollider);
+        if ((collider.masks & neighbourCollider.layers) === 0 || (neighbourCollider.masks & collider.layers) === 0) {
+          return;
+        }
+
+        const collisionInfo = this.GetCollision(bounds, neighbourBounds);
+
+        if (collisionInfo) {
+          collider.currentCollisions.push({
+            collider: neighbourCollider,
+            depth: collisionInfo.depth,
+            normal: collisionInfo.normal,
+          });
         }
       });
 
       const enteredCollisions = collider.currentCollisions.filter((c) => (
-        !collider.previousCollisions.find((previous) => previous.entity.ID === c.entity.ID)
+        !collider.previousCollisions.find((previous) => previous.collider.entity.ID === c.collider.entity.ID)
       ));
       const exitedCollisions = collider.previousCollisions.filter((c) => (
-        !collider.currentCollisions.find((current) => current.entity.ID === c.entity.ID)
+        !collider.currentCollisions.find((current) => current.collider.entity.ID === c.collider.entity.ID)
       ));
 
-      enteredCollisions.forEach((otherCollider) => {
-        collider.OnCollisionEnter(otherCollider);
+      const velocity = entity.GetComponent(VelocityComponent)?.velocity
+
+      enteredCollisions.forEach((collision) => {
+        collider.OnCollisionEnter(collision);
+
+        // messily prototyping fake physics on collision
+        if (!velocity) return;
+
+        const otherEntity = collision.collider.entity;
+        const otherPosition = otherEntity.GetComponent(PositionComponent);
+
+        if (!otherPosition) return;
+
+        position.Add(collision.normal);
+
+        // very very rudimentary
+        if (collision.normal.x !== 0) {
+          velocity.x *= -1;
+        }
+        if (collision.normal.y !== 0) {
+          velocity.y *= -1;
+        }
       });
 
       exitedCollisions.forEach((otherCollider) => {
@@ -117,16 +147,21 @@ class ColliderSystem extends System {
     }
   }
 
-  private Intersects(boundsA: Bounds, boundsB: Bounds): boolean {
-    const AisToTheRightOfB = boundsA.left > boundsB.right;
-    const AisToTheLeftOfB = boundsA.right < boundsB.left;
-    const AisAboveB = boundsA.bottom < boundsB.top;
-    const AisBelowB = boundsA.top > boundsB.bottom;
+  private GetCollision(boundsA: Bounds, boundsB: Bounds): Omit<Collision, 'collider'> | null {
+    const overlapX = Math.min(boundsA.right, boundsB.right) - Math.max(boundsA.left, boundsB.left);
+    const overlapY = Math.min(boundsA.bottom, boundsB.bottom) - Math.max(boundsA.top, boundsB.top);
 
-    return !(AisToTheRightOfB
-      || AisToTheLeftOfB
-      || AisAboveB
-      || AisBelowB);
+    if (overlapX > 0 && overlapY > 0) {
+      if (overlapX < overlapY) {
+        const normalX = boundsA.right > boundsB.right ? 1 : -1;
+        return { normal: new Vec2(normalX, 0), depth: overlapX };
+      } else {
+        const normalY = boundsA.bottom > boundsB.bottom ? 1 : -1;
+        return { normal: new Vec2(0, normalY), depth: overlapY };
+      }
+    }
+
+    return null;
   }
 
   // DEBUGGY

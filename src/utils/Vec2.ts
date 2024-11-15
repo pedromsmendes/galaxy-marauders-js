@@ -22,12 +22,23 @@ class Vec2 {
     return this;
   }
 
+  public Subtract(other: Vec2): Vec2 {
+    this.x -= other.x
+    this.y -= other.y
+
+    return this;
+  }
+
   public Multiply(scalar: number): Vec2 {
     this.x *= scalar;
     this.y *= scalar;
 
     return this;
   }
+
+  public Dot(other: Vec2): number {
+    return this.x * other.x + this.y * other.y;
+  };
 
   public Divide(scalar: number): Vec2 {
     if (scalar === 0) throw new Error("Bro tried to divide by zero, you can't");

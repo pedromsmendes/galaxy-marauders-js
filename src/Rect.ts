@@ -1,7 +1,7 @@
 import Vec2 from './utils/Vec2';
 import Entity from './ecs/Entity';
-import { randRangeInt } from './utils/random';
 import InputManager from './managers/InputManager';
+import { randRangeFloat, randRangeInt } from './utils/random';
 import PositionComponent from './ecs/components/PositionComponent';
 import VelocityComponent from './ecs/components/VelocityComponent';
 import ConfinmentComponent from './ecs/components/ConfinmentComponent';
@@ -16,27 +16,31 @@ class Rect extends Entity {
 
   private speed = 500;
 
-  constructor(initialPos = Vec2.Zero, size = new Vec2(200, 200), color = "#ff0000", playable = false) {
+  constructor(initialPos: Vec2, size: Vec2, color: string, playable = false) {
     super();
 
     this.size = size;
-
     this.color = color;
-
     this.playable = playable;
 
-    const initialSpeed = 500;
+    const initialSpeed = 250;
+
     this.AddComponents(
       new PositionComponent(this, initialPos),
       new VelocityComponent(
         this,
-        new Vec2((randRangeInt(0, 1) ? 1 : -1) * initialSpeed, (randRangeInt(0, 1) ? 1 : -1) * initialSpeed),
+        new Vec2(
+          (randRangeInt(0, 1) ? randRangeFloat(0.1, 1) : randRangeFloat(-0.1, -1)) * randRangeInt(initialSpeed - 25, initialSpeed),
+          (randRangeInt(0, 1) ? randRangeFloat(0.1, 1) : randRangeFloat(-0.1, -1)) * randRangeInt(initialSpeed - 25, initialSpeed),
+        ),
       ),
       new ColliderComponent(
         this,
         this.size,
-        playable ? Layers.Player : Layers.Enemy,
-        playable ? Layers.Enemy | Layers.EnemyProjectile : Layers.Player | Layers.PlayerProjectile,
+        Layers.Enemy,
+        Layers.Enemy,
+        // playable ? Layers.Player : Layers.Enemy,
+        // playable ? Layers.Enemy | Layers.EnemyProjectile : Layers.Player | Layers.PlayerProjectile,
       ),
       new ConfinmentComponent(this, {
         top: 0,
@@ -74,7 +78,7 @@ class Rect extends Entity {
     const posCompontent = this.GetComponent(PositionComponent);
     if (!posCompontent) return;
 
-    ctx.fillStyle = this.broIsColliding ? 'green' : this.color;
+    ctx.fillStyle = this.color;
     ctx.fillRect(
       posCompontent.position.x,
       posCompontent.position.y,

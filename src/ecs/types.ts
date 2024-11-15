@@ -1,5 +1,8 @@
+import type Vec2 from '@/utils/Vec2';
+
 import type Entity from './Entity';
 import type Component from './Component';
+import type ColliderComponent from './components/ColliderComponent';
 
 export type ComponentClass<T extends Component = Component> = new (...args: unknown[]) => T;
 
@@ -11,3 +14,9 @@ export type Bounds = {
   bottom: number;
   left: number;
 }
+
+export type Collision = {
+  collider: ColliderComponent;
+  normal: Vec2;
+  depth: number;
+};

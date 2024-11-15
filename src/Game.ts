@@ -31,11 +31,11 @@ class Game {
     );
 
     for (let i = 0; i < 500; i++) {
-      const randomSize = new Vec2(randRangeInt(25, 50), randRangeInt(25, 50));
+      const randomSize = new Vec2(randRangeInt(15, 15), randRangeInt(15, 15));
 
       const randomPos = new Vec2(
-        randRangeInt(randomSize.x / 2, window.innerWidth - randomSize.x / 2 ),
-        randRangeInt(randomSize.y / 2, window.innerHeight - randomSize.y / 2 ),
+        randRangeInt(randomSize.x / 2, window.innerWidth - randomSize.x / 2),
+        randRangeInt(randomSize.y / 2, window.innerHeight - randomSize.y / 2),
       );
 
       const randomColor = [
