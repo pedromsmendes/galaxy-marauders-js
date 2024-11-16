@@ -19,10 +19,10 @@ class SpriteSystem extends System {
       if (image) {
         CanvasManager.ctx.drawImage(image, position.x - image.width / 2, position.y - image.height / 2);
 
-        if (process.env.NODE_ENV === 'development') {
-          CanvasManager.ctx.strokeStyle = 'red';
-          CanvasManager.ctx.strokeRect(position.x - image.width / 2, position.y - image.height / 2, image.width, image.height);
-        }
+        // if (process.env.NODE_ENV === 'development') {
+        //   CanvasManager.ctx.strokeStyle = "#ffffff80";
+        //   CanvasManager.ctx.strokeRect(position.x - image.width / 2, position.y - image.height / 2, image.width, image.height);
+        // }
       }
     }
   }

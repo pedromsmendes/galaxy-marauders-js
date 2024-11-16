@@ -1,5 +1,6 @@
 import Vec2 from '@/utils/Vec2';
 import Entity from '@/ecs/Entity';
+import { Collision } from '@/ecs/types';
 import InputManager from '@/managers/InputManager';
 import DashComponent from '@/ecs/components/DashComponent';
 import ShootComponent from '@/ecs/components/ShootComponent';
@@ -18,18 +19,24 @@ class Player extends Entity {
   constructor() {
     super();
 
+    const healthComponent = new HealthComponent(this, 100);
+    const colliderComponent = new ColliderComponent(
+      this,
+      new Vec2(100, 84),
+      Layers.Player,
+      Layers.Enemy | Layers.EnemyProjectile,
+    );
+
+    healthComponent.OnDeath.Connect(this.OnDeath.bind(this));
+    colliderComponent.OnCollisionEnter.Connect(this.OnCollisionEnter.bind(this));
+
     this.AddComponents(
       new PositionComponent(this, new Vec2(window.innerWidth / 2, window.innerHeight - 100)),
       new VelocityComponent(this),
-      new ColliderComponent(
-        this,
-        new Vec2(100, 84),
-        Layers.Player,
-        Layers.Enemy | Layers.EnemyProjectile,
-      ),
-      new HealthComponent(this, 100),
+      healthComponent,
+      colliderComponent,
       new DashComponent(this, 1800, 0.2, 0.8),
-      new ShootComponent(this, Vec2.Zero, ProjectileTest, 60, 0.1),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.05),
       new SpriteComponent(this, 'Ship'),
     );
   }
@@ -69,6 +76,16 @@ class Player extends Entity {
         shootComponent.Shoot(new Vec2(positionComponent.position.x,));
       }
     }
+  }
+
+  private OnCollisionEnter(collision: Collision): void {
+    if (collision.collider.layers & (Layers.Enemy | Layers.EnemyProjectile)) {
+      this.GetComponent(HealthComponent)?.Damage(25);
+    }
+  }
+
+  private OnDeath(): void {
+    this.Clear();
   }
 }
 

@@ -9,6 +9,7 @@ abstract class Entity {
   public static get LatestId() { return Entity.LATEST_ID; }
 
   private components: Map<Function, Component>;
+  private toClear = false;
 
   public readonly ID: number;
 
@@ -25,7 +26,7 @@ abstract class Entity {
     this.components.set(component.constructor, component);
   }
 
-  public AddComponents(...components: Component[]) {
+  public AddComponents(...components: Component[]): void {
     for (const component of components) {
       this.AddComponent(component);
     }
@@ -41,6 +42,14 @@ abstract class Entity {
 
   public HasComponent(componentClass: ComponentClass): boolean {
     return this.components.has(componentClass);
+  }
+
+  public Clear(): void {
+    this.toClear = true;
+  }
+
+  public ShouldClear() {
+    return this.toClear;
   }
 }
 

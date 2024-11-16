@@ -30,6 +30,7 @@ const loop = (now: number) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = "#000";
   ctx.fillStyle = "#000";
+  ctx.lineWidth = 1;
 
   game.Update(dt);
 
