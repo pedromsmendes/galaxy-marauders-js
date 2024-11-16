@@ -5,6 +5,7 @@ import System from '../System';
 import ShootComponent from '../components/ShootComponent';
 import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
+import LifetimeComponent from '../components/LifetimeComponent';
 
 class ShootSystem extends System {
   constructor(private game: Game) {
@@ -25,6 +26,10 @@ class ShootSystem extends System {
 
         // instantiating a new projectile like this feels weird, could need params
         const projectile = new shootComponent.projectile();
+        if (!projectile.HasComponent(LifetimeComponent)) {
+          // add lifetime component so projectile despawns
+          projectile.AddComponent(new LifetimeComponent(projectile, shootComponent.projectileLifetime));
+        }
 
         const projectilePosComponent = projectile.GetComponent(PositionComponent);
         const projectileVelComponent = projectile.GetComponent(VelocityComponent);

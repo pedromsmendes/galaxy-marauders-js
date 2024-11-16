@@ -14,6 +14,7 @@ class ProjectileTest extends Entity {
     this.AddComponents(
       new PositionComponent(this),
       new VelocityComponent(this),
+      // new LifetimeComponent(this, 1),
       new ColliderComponent(
         this,
         this.size.Clone().Multiply(2),

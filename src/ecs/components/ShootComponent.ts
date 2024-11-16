@@ -20,11 +20,14 @@ class ShootComponent extends Component {
 
   public cooldownRemaining: number = 0;
 
+  public projectileLifetime: number = 0;
+
   /**
    * @param entity
    * @param shootOrigin Should be the vector2 relative to the Entity position
    * @param projectile What entity (projectile) to shoot. Should it use its own HitboxComponent?
    * @param projectileSpeed Speed of the projectile
+   * @param projectileLifetime Lifetime of the projectile. Defaults to 3
    */
   constructor(
     entity: Entity,
@@ -32,6 +35,7 @@ class ShootComponent extends Component {
     projectile: EntityClass,
     projectileSpeed: number,
     cooldown: number,
+    projectileLifetime: number = 3,
   ) {
     super(entity);
 
@@ -39,6 +43,7 @@ class ShootComponent extends Component {
     this.projectile = projectile;
     this.projectileSpeed = projectileSpeed;
     this.cooldown = cooldown;
+    this.projectileLifetime = projectileLifetime;
   }
 
   public Shoot(direction: Vec2): void {

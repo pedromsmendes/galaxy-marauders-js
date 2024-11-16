@@ -12,6 +12,7 @@ import HealthSystem from './ecs/systems/HealthSystem';
 import SpriteSystem from './ecs/systems/SpriteSystem';
 import ColliderSystem from './ecs/systems/ColliderSystem';
 import MovementSystem from './ecs/systems/MovementSystem';
+import LifetimeSystem from './ecs/systems/LifetimeSystem';
 
 class Game {
   private systems: System[] = [];
@@ -34,6 +35,7 @@ class Game {
           new ShootSystem(this),
           new ColliderSystem(200),
           new SpriteSystem(),
+          new LifetimeSystem(),
         );
 
         this.player = new Player();
