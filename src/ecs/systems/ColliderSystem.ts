@@ -82,30 +82,8 @@ class ColliderSystem extends System {
     }
   }
 
-  // private DoFakeCollisionPhysicsBull(collision: Collision, position: Vec2, velocity: Vec2): void {
-  //   // messily prototyping fake physics on collision
-  //   if (!velocity) return;
-
-  //   const otherEntity = collision.collider.entity;
-  //   const otherPosition = otherEntity.GetComponent(PositionComponent);
-
-  //   if (!otherPosition) return;
-
-  //   position.Add(collision.normal);
-
-  //   // very very rudimentary
-  //   if (collision.normal.x !== 0) {
-  //     velocity.x *= -1;
-  //   }
-  //   if (collision.normal.y !== 0) {
-  //     velocity.y *= -1;
-  //   }
-  // }
-
   private FillGrid(collider: ColliderComponent, pos: Vec2): void {
-    const centerOfEntity = this.GetCenter(collider, pos);
-
-    const cell = this.GetCell(centerOfEntity.x, centerOfEntity.y).ToString();
+    const cell = this.GetCell(pos.x, pos.y).ToString();
 
     if (!this.grid.has(cell)) {
       this.grid.set(cell, []);
@@ -115,12 +93,10 @@ class ColliderSystem extends System {
   }
 
   private GetNeighbours(collider: ColliderComponent, pos: Vec2): ColliderComponent[] {
-    const centerPos = this.GetCenter(collider, pos);
-
     const neighbours: ColliderComponent[] = [];
 
-    for (let x = centerPos.x - this.cellSize; x < centerPos.x + this.cellSize * 2; x += this.cellSize) {
-      for (let y = centerPos.y - this.cellSize; y < centerPos.y + this.cellSize * 2; y += this.cellSize) {
+    for (let x = pos.x - this.cellSize; x < pos.x + this.cellSize * 2; x += this.cellSize) {
+      for (let y = pos.y - this.cellSize; y < pos.y + this.cellSize * 2; y += this.cellSize) {
         const cell = this.GetCell(x, y).ToString();
         neighbours.push(...(this.grid.get(cell) || []));
       }
@@ -129,20 +105,16 @@ class ColliderSystem extends System {
     return neighbours.filter((e) => e.entity.ID !== collider.entity.ID);
   }
 
-  private GetCenter(collider: ColliderComponent, pos: Vec2): Vec2 {
-    return new Vec2(pos.x + collider.size.x / 2, pos.y + collider.size.y / 2);
-  }
-
   private GetCell(x: number, y: number): Vec2 {
     return new Vec2(Math.floor(x / this.cellSize), Math.floor(y / this.cellSize));
   }
 
   private GetBounds(collider: ColliderComponent, pos: Vec2): Bounds {
     return {
-      top: pos.y,
-      right: pos.x + collider.size.x,
-      bottom: pos.y + collider.size.y,
-      left: pos.x,
+      top: pos.y - collider.size.y / 2,
+      right: pos.x + collider.size.x / 2,
+      bottom: pos.y + collider.size.y / 2,
+      left: pos.x - collider.size.x / 2,
     }
   }
 
@@ -165,46 +137,49 @@ class ColliderSystem extends System {
 
   // DEBUGGY
   public override Render(): void {
-    const ctx = CanvasManager.ctx;
+    // const ctx = CanvasManager.ctx;
 
-    for (let x = 0; x <= window.innerWidth; x += this.cellSize) {
-      for (let y = 0; y <= window.innerHeight; y += this.cellSize) {
-        ctx.strokeStyle = "blue";
-        ctx.strokeRect(x, y, this.cellSize, this.cellSize);
+    // for (let x = 0; x <= window.innerWidth; x += this.cellSize) {
+    //   for (let y = 0; y <= window.innerHeight; y += this.cellSize) {
+    //     ctx.strokeStyle = "#ffffff99";
+    //     ctx.strokeRect(x, y, this.cellSize, this.cellSize);
 
-        const centerOfTheRect = this.GetCell(x + this.cellSize / 2, y + this.cellSize / 2).ToString();
-        const content = this.grid.get(centerOfTheRect);
+    //     const centerOfTheRect = this.GetCell(x + this.cellSize / 2, y + this.cellSize / 2).ToString();
+    //     const content = this.grid.get(centerOfTheRect);
 
-        if (content?.length) {
-          ctx.fillStyle = "#ff902230";
-          ctx.fillRect(x, y, this.cellSize, this.cellSize)
-        }
-      }
-    }
+    //     if (content?.length) {
+    //       ctx.fillStyle = "#ff902210";
+    //       ctx.fillRect(x, y, this.cellSize, this.cellSize)
+    //     }
+    //   }
+    // }
 
-    // go over each collider and render it's colliderbox
-    this.grid.forEach((colliders) => {
-      colliders.forEach((collider) => {
-        const pos = collider.entity.GetComponent(PositionComponent)!.position;
-        ctx.strokeStyle = "#ffff0030";
-        ctx.strokeRect(
-          pos.x - collider.size.x / 2,
-          pos.y - collider.size.y / 2,
-          collider.size.x,
-          collider.size.y,
-        );
+    // // go over each collider and render it's colliderbox
+    // this.grid.forEach((colliders) => {
+    //   colliders.forEach((collider) => {
+    //     const pos = collider.entity.GetComponent(PositionComponent)!.position;
 
-        if (collider.currentCollisions.length) {
-          ctx.fillStyle = "#ff000020";
-          ctx.fillRect(
-            pos.x - collider.size.x / 2,
-            pos.y - collider.size.y / 2,
-            collider.size.x,
-            collider.size.y,
-          )
-        }
-      });
-    });
+    //     const bounds = this.GetBounds(collider, pos);
+
+    //     ctx.strokeStyle = "#00ff0040";
+    //     ctx.strokeRect(
+    //       bounds.left,
+    //       bounds.top,
+    //       collider.size.x,
+    //       collider.size.y,
+    //     );
+
+    //     if (collider.currentCollisions.length) {
+    //       ctx.fillStyle = "#ff000020";
+    //       ctx.fillRect(
+    //         bounds.left,
+    //         bounds.top,
+    //         collider.size.x,
+    //         collider.size.y,
+    //       )
+    //     }
+    //   });
+    // });
   }
 }
 
