@@ -10,6 +10,6 @@ export const randRangeFloat = (min: number, max: number): number => {
   return randomValue;
 };
 
-export const mapRange = (value: number, [inMin, inMax]: Range, [outMin, outMax]: Range) => {
+export const mapRange = (value: number, [inMin, inMax]: Range<number>, [outMin, outMax]: Range<number>) => {
   return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 }

@@ -22,10 +22,12 @@ class Player extends Entity {
   constructor() {
     super();
 
+    const size = new Vec2(100, 84);
+
     const healthComponent = new HealthComponent(this, 100);
     const colliderComponent = new ColliderComponent(
       this,
-      new Vec2(100, 84),
+      size,
       Layers.Player,
       Layers.Enemy | Layers.EnemyProjectile,
     );
@@ -33,7 +35,7 @@ class Player extends Entity {
     healthComponent.OnDeath.Connect(this.OnDeath.bind(this));
     colliderComponent.OnCollisionEnter.Connect(this.OnCollisionEnter.bind(this));
 
-    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 100);
+    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 250);
 
     this.AddComponents(
       new PositionComponent(this, initialPos),
@@ -48,9 +50,10 @@ class Player extends Entity {
     this.trail = new ParticleSystem(
       initialPos.Clone(),
       200,
+      new Vec2(0, 25),
       500,
       {
-        color: "lightgray",
+        color: ["#bad0e6", "#2a93f5"],
         lifetime: [0.5, 1],
         radius: [2, 4],
         velocity: [[-10, 10], [125, 150]],

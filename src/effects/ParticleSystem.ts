@@ -2,6 +2,7 @@ import Vec2 from '@/core/utils/Vec2';
 import { Range } from '@/core/types';
 import Entity from '@/core/ecs/Entity';
 import drawCircle from '@/core/utils/drawCircle';
+import { interpolateColor } from '@/core/utils/ColorUtils';
 import { mapRange, randRangeFloat } from '@/core/utils/MathUtils';
 import PositionComponent from '@/core/ecs/components/PositionComponent';
 
@@ -9,16 +10,16 @@ import Particle from './Particle';
 
 type ParticleParams = {
   /** Initial velocity X and velocity Y */
-  velocity: [Range, Range];
-  /** TODO Single color for now, need to change later */
-  color: string;
-  radius: Range;
-  lifetime: Range;
+  velocity: [Range<number>, Range<number>];
+  color: string | Range<string>;
+  radius: Range<number>;
+  lifetime: Range<number>;
 };
 
 class ParticleSystem {
   private position: Vec2;
   private emissionRate: number;
+  private emissionOffset: Vec2;
   private maxParticles: number;
   private particleParams: ParticleParams;
   private parent?: Entity;
@@ -32,12 +33,14 @@ class ParticleSystem {
    *
    * @param position The initial system position
    * @param emissionRate Number of particles to spawn per second
+   * @param emissionOffset
    * @param maxParticles Max particles the system will deal with
    * @param particleParams
    */
-  constructor(position: Vec2, emissionRate: number, maxParticles: number, particleParams: ParticleParams) {
+  constructor(position: Vec2, emissionRate: number, emissionOffset: Vec2, maxParticles: number, particleParams: ParticleParams) {
     this.position = position;
     this.emissionRate = emissionRate;
+    this.emissionOffset = emissionOffset;
     this.maxParticles = maxParticles;
     this.particleParams = particleParams;
 
@@ -68,7 +71,7 @@ class ParticleSystem {
     if (this.parent) {
       const parentPos = this.parent.GetComponent(PositionComponent)?.position;
       if (parentPos) {
-        this.position = parentPos;
+        this.position = parentPos.Clone();
       }
     }
 
@@ -111,7 +114,16 @@ class ParticleSystem {
         [0, 1],
       );
 
-      drawCircle(ctx, particle.position, particle.radius, { fillColor: particle.color })
+      const lifetimeRation = particle.age / particle.lifetime;
+
+      let color: string;
+      if (Array.isArray(particle.color)) {
+        color = interpolateColor(particle.color[0], particle.color[1], lifetimeRation);
+      } else {
+        color = particle.color;
+      }
+
+      drawCircle(ctx, particle.position, particle.radius, { fillColor: color })
     }
 
     ctx.globalAlpha = 1;
@@ -125,7 +137,7 @@ class ParticleSystem {
 
     particle.radius = randRangeFloat(...this.particleParams.radius);
 
-    particle.position = this.position.Clone();
+    particle.position = this.position.Clone().Add(this.emissionOffset);
 
     particle.color = this.particleParams.color;
 

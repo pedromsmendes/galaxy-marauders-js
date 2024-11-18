@@ -21,4 +21,4 @@ export type Collision = {
   depth: number;
 };
 
-export type Range = [number, number];
+export type Range<T extends number | string> = [T, T];

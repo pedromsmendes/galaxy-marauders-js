@@ -1,9 +1,10 @@
+import { Range } from '@/core/types';
 import Vec2 from '@/core/utils/Vec2';
 
 class Particle {
   public position: Vec2;
   public velocity: Vec2;
-  public color: string;
+  public color: string | Range<string>;
   public radius: number;
   public lifetime: number;
   public opacity: number;
