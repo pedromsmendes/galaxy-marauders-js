@@ -1,5 +1,5 @@
-import Vec2 from '@/utils/Vec2';
-import Signal from '@/utils/Signal';
+import Vec2 from '@/core/utils/Vec2';
+import Signal from '@/core/utils/Signal';
 
 import type { Collision } from '../types';
 

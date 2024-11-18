@@ -1,5 +1,4 @@
-import Vec2 from '@/utils/Vec2';
-import CanvasManager from '@/managers/CanvasManager';
+import Vec2 from '@/core/utils/Vec2';
 
 import type { Bounds, Collision } from '../types';
 

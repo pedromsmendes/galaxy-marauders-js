@@ -1,4 +1,4 @@
-import type Vec2 from '@/utils/Vec2';
+import type Vec2 from '@/core/utils/Vec2';
 
 import type Entity from './Entity';
 import type Component from './Component';

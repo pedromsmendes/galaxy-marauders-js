@@ -1,4 +1,4 @@
-import Vec2 from '../utils/Vec2';
+import Vec2 from '../core/utils/Vec2';
 
 export type Keys = 'w' | 'a' | 's' | 'd' | 'space';
 export type MouseButtons = 0 | 1 | 2 | 3 | 4;

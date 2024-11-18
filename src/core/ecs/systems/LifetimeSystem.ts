@@ -9,9 +9,9 @@ class LifetimeSystem extends System {
 
       if (!lifetimeComponent) continue;
 
-      lifetimeComponent.lifetime += dt;
+      lifetimeComponent.age += dt;
 
-      if (lifetimeComponent.lifetime >= lifetimeComponent.maxLifetime) {
+      if (lifetimeComponent.age >= lifetimeComponent.lifetime) {
         lifetimeComponent.entity.Clear();
       }
     }

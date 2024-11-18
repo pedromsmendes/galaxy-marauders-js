@@ -1,18 +1,18 @@
-import Vec2 from './utils/Vec2';
-import Entity from './ecs/Entity';
-import System from './ecs/System';
+import Vec2 from './core/utils/Vec2';
 import Enemy from './entities/Enemy';
+import Entity from './core/ecs/Entity';
+import System from './core/ecs/System';
 import Player from './entities/Player';
-import DashSystem from './ecs/systems/DashSystem';
-import InputManager from './managers/InputManager';
 import AssetManager from './managers/AssetManager';
-import ShootSystem from './ecs/systems/ShootSystem';
+import InputManager from './managers/InputManager';
 import CanvasManager from './managers/CanvasManager';
-import HealthSystem from './ecs/systems/HealthSystem';
-import SpriteSystem from './ecs/systems/SpriteSystem';
-import ColliderSystem from './ecs/systems/ColliderSystem';
-import MovementSystem from './ecs/systems/MovementSystem';
-import LifetimeSystem from './ecs/systems/LifetimeSystem';
+import DashSystem from './core/ecs/systems/DashSystem';
+import ShootSystem from './core/ecs/systems/ShootSystem';
+import HealthSystem from './core/ecs/systems/HealthSystem';
+import SpriteSystem from './core/ecs/systems/SpriteSystem';
+import ColliderSystem from './core/ecs/systems/ColliderSystem';
+import LifetimeSystem from './core/ecs/systems/LifetimeSystem';
+import MovementSystem from './core/ecs/systems/MovementSystem';
 
 class Game {
   private systems: System[] = [];

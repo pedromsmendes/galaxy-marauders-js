@@ -1,4 +1,4 @@
-import Entity from '@/ecs/Entity';
+import Entity from '@/core/ecs/Entity';
 
 abstract class System {
   public Render(_entities: Entity[]): void { }

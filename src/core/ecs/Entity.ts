@@ -1,4 +1,4 @@
-import Component from '@/ecs/Component';
+import Component from '@/core/ecs/Component';
 
 import type { ComponentClass } from './types';
 

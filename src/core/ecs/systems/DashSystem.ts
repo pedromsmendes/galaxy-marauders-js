@@ -1,4 +1,4 @@
-import Vec2 from '@/utils/Vec2';
+import Vec2 from '@/core/utils/Vec2';
 
 import Entity from '../Entity';
 import System from '../System';

@@ -1,12 +1,12 @@
-import Vec2 from '@/utils/Vec2';
-import Entity from '@/ecs/Entity';
-import { Collision } from '@/ecs/types';
-import ShootComponent from '@/ecs/components/ShootComponent';
-import HealthComponent from '@/ecs/components/HealthComponent';
-import SpriteComponent from '@/ecs/components/SpriteComponent';
-import PositionComponent from '@/ecs/components/PositionComponent';
-import VelocityComponent from '@/ecs/components/VelocityComponent';
-import ColliderComponent, { Layers } from '@/ecs/components/ColliderComponent';
+import Vec2 from '@/core/utils/Vec2';
+import Entity from '@/core/ecs/Entity';
+import { Collision } from '@/core/ecs/types';
+import ShootComponent from '@/core/ecs/components/ShootComponent';
+import HealthComponent from '@/core/ecs/components/HealthComponent';
+import SpriteComponent from '@/core/ecs/components/SpriteComponent';
+import PositionComponent from '@/core/ecs/components/PositionComponent';
+import VelocityComponent from '@/core/ecs/components/VelocityComponent';
+import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderComponent';
 
 import ProjectileTest from './ProjectileTest';
 

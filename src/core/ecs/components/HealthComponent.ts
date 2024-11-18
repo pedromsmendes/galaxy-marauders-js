@@ -1,4 +1,4 @@
-import Signal from '@/utils/Signal';
+import Signal from '@/core/utils/Signal';
 
 import Entity from '../Entity';
 import Component from '../Component';
