@@ -1,6 +1,6 @@
 import Vec2 from '@/core/utils/Vec2';
 
-import type { EntityClass } from '../types';
+import type { EntityClass } from '../../types';
 
 import Entity from '../Entity';
 import Component from '../Component';

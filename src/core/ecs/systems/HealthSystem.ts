@@ -1,5 +1,4 @@
 import Vec2 from '@/core/utils/Vec2';
-import CanvasManager from '@/managers/CanvasManager';
 
 import Entity from '../Entity';
 import System from '../System';
@@ -20,16 +19,13 @@ class HealthSystem extends System {
     }
   }
 
-  public override Render(entities: Entity[]): void {
+  public override Render(ctx: CanvasRenderingContext2D, entities: Entity[]): void {
     if (process.env.NODE_ENV === "development") {
       for (const entity of entities) {
         const health = entity.GetComponent(HealthComponent);
         const position = entity.GetComponent(PositionComponent)?.position;
 
         if (!health || !position || health.isDead) continue;
-
-        const ctx = CanvasManager.ctx;
-
 
         // temporarily getting the size from the colliders
         const entitySize = entity.GetComponent(ColliderComponent)?.size || Vec2.Zero;

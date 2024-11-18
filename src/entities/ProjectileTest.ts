@@ -1,6 +1,5 @@
 import Vec2 from '@/core/utils/Vec2';
 import Entity from '@/core/ecs/Entity';
-import CanvasManager from '@/managers/CanvasManager';
 import PositionComponent from '@/core/ecs/components/PositionComponent';
 import VelocityComponent from '@/core/ecs/components/VelocityComponent';
 import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderComponent';
@@ -24,9 +23,7 @@ class ProjectileTest extends Entity {
     );
   }
 
-  public override Render(): void {
-    const ctx = CanvasManager.ctx;
-
+  public override Render(ctx: CanvasRenderingContext2D): void {
     const positionComponent = this.GetComponent(PositionComponent);
     if (!positionComponent) return;
 

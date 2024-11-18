@@ -1,6 +1,6 @@
 import Component from '@/core/ecs/Component';
 
-import type { ComponentClass } from './types';
+import type { ComponentClass } from '../types';
 
 abstract class Entity {
   private static LATEST_ID = 0;
@@ -20,7 +20,7 @@ abstract class Entity {
   }
 
   public Update(_dt: number): void { };
-  public Render(): void { };
+  public Render(_ctx: CanvasRenderingContext2D): void { };
 
   public AddComponent(component: Component): void {
     this.components.set(component.constructor, component);

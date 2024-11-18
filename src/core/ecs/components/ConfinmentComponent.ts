@@ -1,4 +1,4 @@
-import type { Bounds } from '../types';
+import type { Bounds } from '../../types';
 
 import Entity from '../Entity';
 import Component from '../Component';

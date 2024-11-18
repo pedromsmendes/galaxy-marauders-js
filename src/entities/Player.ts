@@ -1,7 +1,8 @@
 import Vec2 from '@/core/utils/Vec2';
 import Entity from '@/core/ecs/Entity';
-import { Collision } from '@/core/ecs/types';
+import { Collision } from '@/core/types';
 import InputManager from '@/managers/InputManager';
+import ParticleSystem from '@/effects/ParticleSystem';
 import DashComponent from '@/core/ecs/components/DashComponent';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
@@ -15,6 +16,8 @@ import ProjectileTest from './ProjectileTest';
 class Player extends Entity {
   /** px/sec */
   private speed = 500;
+
+  private trail: ParticleSystem;
 
   constructor() {
     super();
@@ -30,8 +33,10 @@ class Player extends Entity {
     healthComponent.OnDeath.Connect(this.OnDeath.bind(this));
     colliderComponent.OnCollisionEnter.Connect(this.OnCollisionEnter.bind(this));
 
+    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 100);
+
     this.AddComponents(
-      new PositionComponent(this, new Vec2(window.innerWidth / 2, window.innerHeight - 100)),
+      new PositionComponent(this, initialPos),
       new VelocityComponent(this),
       healthComponent,
       colliderComponent,
@@ -39,9 +44,24 @@ class Player extends Entity {
       new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.05),
       new SpriteComponent(this, 'Ship'),
     );
+
+    this.trail = new ParticleSystem(
+      initialPos.Clone(),
+      200,
+      500,
+      {
+        color: "lightgray",
+        lifetime: [0.5, 1],
+        radius: [2, 4],
+        velocity: [[-10, 10], [125, 150]],
+      }
+    );
+
+    this.trail.Start();
+    this.trail.SetParent(this);
   }
 
-  public override Update(_dt: number): void {
+  public override Update(dt: number): void {
     const positionComponent = this.GetComponent(PositionComponent);
     const velocityComponent = this.GetComponent(VelocityComponent);
     if (!positionComponent || !velocityComponent) return;
@@ -76,6 +96,12 @@ class Player extends Entity {
         shootComponent.Shoot(new Vec2(positionComponent.position.x,));
       }
     }
+
+    this.trail.Update(dt);
+  }
+
+  public override Render(ctx: CanvasRenderingContext2D): void {
+    this.trail.Render(ctx);
   }
 
   private OnCollisionEnter(collision: Collision): void {

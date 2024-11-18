@@ -4,6 +4,11 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("2d context not supported");
 
+ctx.strokeStyle = "#000";
+ctx.fillStyle = "#000";
+ctx.lineWidth = 1;
+ctx.save();
+
 const onResize = () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -18,7 +23,7 @@ const initGame = () => {
   requestAnimationFrame(loop);
 };
 
-const game = new Game(ctx, initGame);
+const game = new Game(initGame);
 
 let lastTime = 0;
 
@@ -27,14 +32,12 @@ const loop = (now: number) => {
   lastTime = now;
 
   // clear stuff
+  ctx.restore();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#000";
-  ctx.fillStyle = "#000";
-  ctx.lineWidth = 1;
 
   game.Update(dt);
 
-  game.Render();
+  game.Render(ctx);
 
   requestAnimationFrame(loop);
 }

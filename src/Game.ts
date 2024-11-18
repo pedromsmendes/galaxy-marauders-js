@@ -1,11 +1,8 @@
-import Vec2 from './core/utils/Vec2';
-import Enemy from './entities/Enemy';
 import Entity from './core/ecs/Entity';
 import System from './core/ecs/System';
 import Player from './entities/Player';
 import AssetManager from './managers/AssetManager';
 import InputManager from './managers/InputManager';
-import CanvasManager from './managers/CanvasManager';
 import DashSystem from './core/ecs/systems/DashSystem';
 import ShootSystem from './core/ecs/systems/ShootSystem';
 import HealthSystem from './core/ecs/systems/HealthSystem';
@@ -20,13 +17,12 @@ class Game {
 
   public player: Player;
 
-  constructor(ctx: CanvasRenderingContext2D, startGame: Function) {
+  constructor(startGame: Function) {
     const assetManager = new AssetManager();
 
     assetManager.LoadAssets()
       .then(() => {
         new InputManager();
-        new CanvasManager(ctx);
 
         this.systems.push(
           new MovementSystem(),
@@ -41,19 +37,19 @@ class Game {
         this.player = new Player();
         this.AddEntity(this.player)
 
-        for (let i = 0; i < 5; i++) {
-          this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 100)))
-        }
+        // for (let i = 0; i < 5; i++) {
+        //   this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 100)))
+        // }
 
         startGame();
       })
   }
 
-  AddEntity(entity: Entity) {
+  public AddEntity(entity: Entity) {
     this.entities.push(entity);
   }
 
-  Update(dt: number): void {
+  public Update(dt: number): void {
     for (const entity of this.entities) {
       entity.Update(dt);
     }
@@ -65,12 +61,12 @@ class Game {
     this.entities = this.entities.filter((entity) => !entity.ShouldClear());
   }
 
-  Render(): void {
+  public Render(ctx: CanvasRenderingContext2D): void {
     for (const entity of this.entities) {
-      entity.Render();
+      entity.Render(ctx);
     }
     for (const system of this.systems) {
-      system.Render(this.entities);
+      system.Render(ctx, this.entities);
     }
   }
 }

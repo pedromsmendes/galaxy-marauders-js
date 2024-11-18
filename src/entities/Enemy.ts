@@ -1,6 +1,6 @@
 import Vec2 from '@/core/utils/Vec2';
 import Entity from '@/core/ecs/Entity';
-import { Collision } from '@/core/ecs/types';
+import { Collision } from '@/core/types';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
 import SpriteComponent from '@/core/ecs/components/SpriteComponent';

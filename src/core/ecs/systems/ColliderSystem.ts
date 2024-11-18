@@ -1,6 +1,6 @@
 import Vec2 from '@/core/utils/Vec2';
 
-import type { Bounds, Collision } from '../types';
+import type { Bounds, Collision } from '../../types';
 
 import Entity from '../Entity';
 import System from '../System';
@@ -135,9 +135,7 @@ class ColliderSystem extends System {
   }
 
   // DEBUGGY
-  public override Render(): void {
-    // const ctx = CanvasManager.ctx;
-
+  public override Render(_ctx: CanvasRenderingContext2D, _entities: Entity[]): void {
     // for (let x = 0; x <= window.innerWidth; x += this.cellSize) {
     //   for (let y = 0; y <= window.innerHeight; y += this.cellSize) {
     //     ctx.strokeStyle = "#ffffff99";
