@@ -1,7 +1,8 @@
 import Vec2 from '@/core/utils/Vec2';
 import { Range } from '@/core/types';
 import Entity from '@/core/ecs/Entity';
-import drawCircle from '@/core/utils/drawCircle';
+import GUIManager from '@/managers/GUIManager';
+import { drawCircle } from '@/core/utils/DrawUtils';
 import { interpolateColor } from '@/core/utils/ColorUtils';
 import { mapRange, randRangeFloat } from '@/core/utils/MathUtils';
 import PositionComponent from '@/core/ecs/components/PositionComponent';
@@ -18,10 +19,10 @@ type ParticleParams = {
 
 class ParticleSystem {
   private position: Vec2;
-  private emissionRate: number;
+  public emissionRate: number;
   private emissionOffset: Vec2;
-  private maxParticles: number;
-  private particleParams: ParticleParams;
+  public maxParticles: number;
+  public particleParams: ParticleParams;
   private parent?: Entity;
 
   private particles: Particle[];
@@ -51,6 +52,32 @@ class ParticleSystem {
     for (let i = 0; i < this.maxParticles; i++) {
       this.pool.push(new Particle());
     }
+
+    const gui = GUIManager.Instance!.gui.addFolder("Particle system");
+
+    gui.add(this, "emissionRate").min(0).max(5000).step(100).name("Emission rate");
+    gui.add(this, "maxParticles").min(0).max(10000).step(200).name("Max particles")
+      .onFinishChange(() => {
+        this.ResetSystem();
+      });
+
+    gui.add(this.particleParams.lifetime, "0").min(0).max(60).step(1).name("Life time min");
+    gui.add(this.particleParams.lifetime, "1").min(0).max(60).step(1).name("Life time max");
+
+    gui.add(this.particleParams.radius, "0").min(0).max(100).step(1).name("Radius min");
+    gui.add(this.particleParams.radius, "1").min(0).max(100).step(1).name("Radius max");
+
+    gui.add(this.particleParams.velocity[0], "0").min(-500).max(500).step(1).name("Velocity x min");
+    gui.add(this.particleParams.velocity[0], "1").min(-500).max(500).step(1).name("Velocity x max");
+    gui.add(this.particleParams.velocity[1], "1").min(-500).max(500).step(1).name("Velocity y min");
+    gui.add(this.particleParams.velocity[1], "0").min(-500).max(500).step(1).name("Velocity y max");
+
+    if (Array.isArray(this.particleParams.color)) {
+      gui.addColor(this.particleParams.color, "0").name("Color start");
+      gui.addColor(this.particleParams.color, "1").name("Color end");
+    } else {
+      gui.addColor(this.particleParams, "color").name("Color");
+    }
   }
 
   public Start(): void {
@@ -74,6 +101,8 @@ class ParticleSystem {
         this.position = parentPos.Clone();
       }
     }
+
+    if (!this.emissionRate) return;
 
     this.timeSinceEmission += dt
     const particlesToEmit = Math.floor(this.emissionRate * this.timeSinceEmission);
@@ -143,6 +172,17 @@ class ParticleSystem {
 
     particle.velocity.x = randRangeFloat(...this.particleParams.velocity[0]);
     particle.velocity.y = randRangeFloat(...this.particleParams.velocity[1]);
+  }
+
+  private ResetSystem(): void {
+    this.pool = [];
+    this.particles = [];
+    this.timeSinceEmission = 0;
+
+    // filling the pool right away?
+    for (let i = 0; i < this.maxParticles; i++) {
+      this.pool.push(new Particle());
+    }
   }
 }
 

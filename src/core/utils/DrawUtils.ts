@@ -1,6 +1,19 @@
 import Vec2 from './Vec2';
 
-const drawCircle = (
+export const drawLine = (
+  ctx: CanvasRenderingContext2D,
+  start: Vec2,
+  end: Vec2,
+  color = "green",
+) => {
+  ctx.strokeStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(start.x, start.y);
+  ctx.lineTo(end.x, end.y);
+  ctx.stroke();
+};
+
+export const drawCircle = (
   ctx: CanvasRenderingContext2D,
   pos: Vec2,
   radius: number,
@@ -27,5 +40,3 @@ const drawCircle = (
     ctx.fill();
   };
 };
-
-export default drawCircle;

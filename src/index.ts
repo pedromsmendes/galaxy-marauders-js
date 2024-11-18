@@ -23,7 +23,7 @@ const initGame = () => {
   requestAnimationFrame(loop);
 };
 
-const game = new Game(initGame);
+const game = new Game(canvas, initGame);
 
 let lastTime = 0;
 

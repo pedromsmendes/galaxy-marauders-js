@@ -24,7 +24,7 @@ class InputManager {
 
   public static mousePos = new Vec2();
 
-  constructor() {
+  constructor(parent: HTMLElement) {
     /* Singleton */ {
       if (InputManager.Instance) {
         return InputManager.Instance
@@ -49,7 +49,7 @@ class InputManager {
       if (e.code.toLowerCase() === "space") InputManager.keydown.space = false;
     });
 
-    window.addEventListener("mousedown", (e) => {
+    parent.addEventListener("mousedown", (e) => {
       if (e.button === 0) InputManager.mouseButtonDown[0] = true;
       if (e.button === 1) InputManager.mouseButtonDown[1] = true;
       if (e.button === 2) InputManager.mouseButtonDown[2] = true;
@@ -57,7 +57,7 @@ class InputManager {
       if (e.button === 4) InputManager.mouseButtonDown[4] = true;
     });
 
-    window.addEventListener("mouseup", (e) => {
+    parent.addEventListener("mouseup", (e) => {
       if (e.button === 0) InputManager.mouseButtonDown[0] = false;
       if (e.button === 1) InputManager.mouseButtonDown[1] = false;
       if (e.button === 2) InputManager.mouseButtonDown[2] = false;
@@ -65,7 +65,7 @@ class InputManager {
       if (e.button === 4) InputManager.mouseButtonDown[4] = false;
     });
 
-    window.addEventListener("mousemove", (e) => {
+    parent.addEventListener("mousemove", (e) => {
       InputManager.mousePos.x = e.x;
       InputManager.mousePos.y = e.y;
     })

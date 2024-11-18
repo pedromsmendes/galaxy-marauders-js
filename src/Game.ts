@@ -1,6 +1,7 @@
 import Entity from './core/ecs/Entity';
 import System from './core/ecs/System';
 import Player from './entities/Player';
+import GUIManager from './managers/GUIManager';
 import AssetManager from './managers/AssetManager';
 import InputManager from './managers/InputManager';
 import DashSystem from './core/ecs/systems/DashSystem';
@@ -14,15 +15,15 @@ import MovementSystem from './core/ecs/systems/MovementSystem';
 class Game {
   private systems: System[] = [];
   private entities: Entity[] = [];
-
   public player: Player;
 
-  constructor(startGame: Function) {
+  constructor(canvas: HTMLCanvasElement, startGame: Function) {
     const assetManager = new AssetManager();
 
     assetManager.LoadAssets()
       .then(() => {
-        new InputManager();
+        new InputManager(canvas);
+        new GUIManager();
 
         this.systems.push(
           new MovementSystem(),
