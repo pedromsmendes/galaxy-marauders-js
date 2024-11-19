@@ -5,7 +5,7 @@ class Particle {
   public position: Vec2;
   public velocity: Vec2;
   public color: string | Range<string>;
-  public radius: number;
+  public size: number;
   public lifetime: number;
   public opacity: number;
   public age: number;
@@ -14,7 +14,7 @@ class Particle {
     this.position = Vec2.Zero;
     this.velocity = Vec2.Zero;
     this.color = "#fff";
-    this.radius = 0;
+    this.size = 0;
     this.lifetime = 1;
     this.age = 0;
     this.opacity = 1;

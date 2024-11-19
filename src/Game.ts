@@ -1,9 +1,12 @@
+import Vec2 from './core/utils/Vec2';
 import Entity from './core/ecs/Entity';
 import System from './core/ecs/System';
-import Player from './entities/Player';
+import { EmissionShape } from './core/types';
+import Player from './entities/Player/Player';
 import GUIManager from './managers/GUIManager';
 import AssetManager from './managers/AssetManager';
 import InputManager from './managers/InputManager';
+import ParticleSystem from './effects/ParticleSystem';
 import DashSystem from './core/ecs/systems/DashSystem';
 import ShootSystem from './core/ecs/systems/ShootSystem';
 import HealthSystem from './core/ecs/systems/HealthSystem';
@@ -15,6 +18,7 @@ import MovementSystem from './core/ecs/systems/MovementSystem';
 class Game {
   private systems: System[] = [];
   private entities: Entity[] = [];
+  private zippingStars: ParticleSystem;
   public player: Player;
 
   constructor(canvas: HTMLCanvasElement, startGame: Function) {
@@ -35,6 +39,24 @@ class Game {
           new LifetimeSystem(),
         );
 
+        this.zippingStars = new ParticleSystem(
+          new Vec2(window.innerWidth / 2, -30),
+          {
+            shape: EmissionShape.Line,
+            start: new Vec2(-30, -30),
+            end: new Vec2(window.innerWidth + 30, -30),
+            maxParticles: 150,
+            rate: 20,
+          },
+          {
+            color: "#ffffff",
+            lifetime: [1.5, 1.5],
+            size: [1, 3],
+            velocity: [[0, 0], [1000, 1000]],
+          }
+        );
+        this.zippingStars.Start();
+
         this.player = new Player();
         this.AddEntity(this.player)
 
@@ -51,6 +73,8 @@ class Game {
   }
 
   public Update(dt: number): void {
+    this.zippingStars.Update(dt);
+
     for (const entity of this.entities) {
       entity.Update(dt);
     }
@@ -63,6 +87,8 @@ class Game {
   }
 
   public Render(ctx: CanvasRenderingContext2D): void {
+    this.zippingStars.Render(ctx);
+
     for (const entity of this.entities) {
       entity.Render(ctx);
     }

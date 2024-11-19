@@ -22,3 +22,47 @@ export type Collision = {
 };
 
 export type Range<T extends number | string> = [T, T];
+
+export enum EmissionShape {
+  Point,
+  Line,
+  Rectangle,
+  Circle,
+}
+
+export type PointEmission = {
+  shape: EmissionShape.Point;
+};
+
+export type LineEmission = {
+  shape: EmissionShape.Line;
+  start: Vec2;
+  end: Vec2;
+};
+
+export type RectangleEmission = {
+  shape: EmissionShape.Rectangle;
+  width: number;
+  height: number;
+};
+
+export type CircleEmission = {
+  shape: EmissionShape.Circle;
+  radius: number;
+};
+
+export type CommonEmission = {
+  rate: number;
+  offset?: Vec2;
+  maxParticles: number;
+};
+
+export type Emission = CommonEmission & (PointEmission | LineEmission | RectangleEmission | CircleEmission);
+
+export type ParticleParams = {
+  /** Initial velocity X and velocity Y */
+  velocity: [Range<number>, Range<number>];
+  color: string | Range<string>;
+  size: Range<number>;
+  lifetime: Range<number>;
+};

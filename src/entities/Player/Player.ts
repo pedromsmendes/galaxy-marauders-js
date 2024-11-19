@@ -2,7 +2,6 @@ import Vec2 from '@/core/utils/Vec2';
 import Entity from '@/core/ecs/Entity';
 import { Collision } from '@/core/types';
 import InputManager from '@/managers/InputManager';
-import ParticleSystem from '@/effects/ParticleSystem';
 import DashComponent from '@/core/ecs/components/DashComponent';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
@@ -11,13 +10,14 @@ import PositionComponent from '@/core/ecs/components/PositionComponent';
 import VelocityComponent from '@/core/ecs/components/VelocityComponent';
 import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderComponent';
 
-import ProjectileTest from './ProjectileTest';
+import Trails from './Trails';
+import ProjectileTest from '../ProjectileTest';
 
 class Player extends Entity {
   /** px/sec */
   private speed = 500;
 
-  private trail: ParticleSystem;
+  private trails: Trails;
 
   constructor() {
     super();
@@ -47,21 +47,12 @@ class Player extends Entity {
       new SpriteComponent(this, 'Ship'),
     );
 
-    this.trail = new ParticleSystem(
-      initialPos.Clone(),
-      200,
+    this.trails = new Trails(
+      this,
       new Vec2(0, 25),
-      500,
-      {
-        color: ["#bad0e6", "#2a93f5"],
-        lifetime: [0.5, 1],
-        radius: [2, 4],
-        velocity: [[-10, 10], [125, 150]],
-      }
+      new Vec2(-35, 5),
+      new Vec2(35, 5),
     );
-
-    this.trail.Start();
-    this.trail.SetParent(this);
   }
 
   public override Update(dt: number): void {
@@ -91,6 +82,9 @@ class Player extends Entity {
       if (InputManager.keydown.d) {
         velocityComponent.velocity.x += this.speed;
       }
+
+      this.trails.leftActive = InputManager.keydown.d;
+      this.trails.rightActive = InputManager.keydown.a;
     }
 
     const shootComponent = this.GetComponent(ShootComponent);
@@ -100,11 +94,11 @@ class Player extends Entity {
       }
     }
 
-    this.trail.Update(dt);
+    this.trails.Update(dt);
   }
 
   public override Render(ctx: CanvasRenderingContext2D): void {
-    this.trail.Render(ctx);
+    this.trails.Render(ctx);
   }
 
   private OnCollisionEnter(collision: Collision): void {
