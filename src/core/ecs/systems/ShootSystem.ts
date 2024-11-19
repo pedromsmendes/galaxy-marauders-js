@@ -3,7 +3,6 @@ import Game from '@/Game';
 import Entity from '../Entity';
 import System from '../System';
 import ShootComponent from '../components/ShootComponent';
-import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
 import LifetimeComponent from '../components/LifetimeComponent';
 
@@ -15,9 +14,9 @@ class ShootSystem extends System {
   public override Update(dt: number, entities: Entity[]): void {
     for (const entity of entities) {
       const shootComponent = entity.GetComponent(ShootComponent);
-      const posComponent = entity.GetComponent(PositionComponent);
+      const position = entity.GetWorldPosition();
 
-      if (!shootComponent || !posComponent) return;
+      if (!shootComponent || !position) return;
 
       shootComponent.TickCooldown(dt);
 
@@ -31,15 +30,14 @@ class ShootSystem extends System {
           projectile.AddComponent(new LifetimeComponent(projectile, shootComponent.projectileLifetime));
         }
 
-        const projectilePosComponent = projectile.GetComponent(PositionComponent);
         const projectileVelComponent = projectile.GetComponent(VelocityComponent);
 
-        if (!projectilePosComponent || !projectileVelComponent) return;
+        if (!projectileVelComponent) return;
 
         /** A vector from the position of the entity to the {@link ShootComponent.shootOrigin} */
-        const originPos = posComponent.position.Clone().Add(shootComponent.shootOrigin);
+        const originPos = position.Clone().Add(shootComponent.shootOrigin);
 
-        projectilePosComponent.position = originPos;
+        projectile.SetPosition(originPos);
 
         projectileVelComponent.velocity =
           originPos.Direction(shootComponent.direction).Normalize().Multiply(shootComponent.projectileSpeed);

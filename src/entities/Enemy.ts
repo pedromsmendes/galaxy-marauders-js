@@ -4,15 +4,14 @@ import { Collision } from '@/core/types';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
 import SpriteComponent from '@/core/ecs/components/SpriteComponent';
-import PositionComponent from '@/core/ecs/components/PositionComponent';
 import VelocityComponent from '@/core/ecs/components/VelocityComponent';
 import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderComponent';
 
 import ProjectileTest from './ProjectileTest';
 
 class Enemy extends Entity {
-  constructor(initialPos?: Vec2) {
-    super();
+  constructor(initialPos: Vec2) {
+    super(initialPos);
 
     const healthComponent = new HealthComponent(this, 100);
     const colliderComponent = new ColliderComponent(
@@ -26,7 +25,6 @@ class Enemy extends Entity {
     healthComponent.OnDeath.Connect(this.OnDeath.bind(this));
 
     this.AddComponents(
-      new PositionComponent(this, initialPos || new Vec2(window.innerWidth / 2, window.innerHeight - 100)),
       new VelocityComponent(this),
       healthComponent,
       new ShootComponent(this, Vec2.Zero, ProjectileTest, 1000, 0.2),
@@ -42,7 +40,7 @@ class Enemy extends Entity {
   }
 
   private OnDeath(): void {
-    this.Clear();
+    this.Destroy();
   }
 }
 

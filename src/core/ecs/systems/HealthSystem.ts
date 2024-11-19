@@ -3,7 +3,6 @@ import Vec2 from '@/core/utils/Vec2';
 import Entity from '../Entity';
 import System from '../System';
 import HealthComponent from '../components/HealthComponent';
-import PositionComponent from '../components/PositionComponent';
 import ColliderComponent from '../components/ColliderComponent';
 
 class HealthSystem extends System {
@@ -23,9 +22,10 @@ class HealthSystem extends System {
     if (process.env.NODE_ENV === "development") {
       for (const entity of entities) {
         const health = entity.GetComponent(HealthComponent);
-        const position = entity.GetComponent(PositionComponent)?.position;
 
-        if (!health || !position || health.isDead) continue;
+        if (!health || health.isDead) continue;
+
+        const position = entity.GetWorldPosition();
 
         // temporarily getting the size from the colliders
         const entitySize = entity.GetComponent(ColliderComponent)?.size || Vec2.Zero;

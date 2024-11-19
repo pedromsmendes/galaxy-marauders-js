@@ -1,12 +1,11 @@
-import type Vec2 from '@/core/utils/Vec2';
-import type Entity from '@/core/ecs/Entity';
+import type Transform from '@/core/utils/Transform';
 
+import Vec2 from '@/core/utils/Vec2';
 import { EmissionShape } from '@/core/types';
 import ParticleSystem from '@/effects/ParticleSystem';
-import PositionComponent from '@/core/ecs/components/PositionComponent';
 
 class Trails {
-  private parent: Entity;
+  private parent: Transform;
 
   private mainOffset: Vec2;
   private leftOffset: Vec2;
@@ -20,16 +19,14 @@ class Trails {
   public leftActive = true;
   public rightActive = true;
 
-  constructor(parent: Entity, mainOffset: Vec2, leftOffset: Vec2, rightOffset: Vec2) {
+  constructor(parent: Transform, mainOffset: Vec2, leftOffset: Vec2, rightOffset: Vec2) {
     this.parent = parent;
     this.mainOffset = mainOffset;
     this.leftOffset = leftOffset;
     this.rightOffset = rightOffset;
 
-    const parentPos = this.parent.GetComponent(PositionComponent)!.position;
-
     this.mainTrail = new ParticleSystem(
-      parentPos.Clone(),
+      Vec2.Zero,
       {
         shape: EmissionShape.Point,
         rate: 800,
@@ -47,7 +44,7 @@ class Trails {
     this.mainTrail.SetParent(this.parent);
 
     this.leftTrail = new ParticleSystem(
-      parentPos.Clone(),
+      Vec2.Zero,
       {
         shape: EmissionShape.Point,
         rate: 300,
@@ -65,7 +62,7 @@ class Trails {
     this.leftTrail.SetParent(this.parent);
 
     this.rightTrail = new ParticleSystem(
-      parentPos.Clone(),
+      Vec2.Zero,
       {
         shape: EmissionShape.Point,
         rate: 300,

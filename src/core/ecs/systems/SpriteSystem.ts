@@ -3,15 +3,15 @@ import AssetManager from '@/managers/AssetManager';
 import Entity from '../Entity';
 import System from '../System';
 import SpriteComponent from '../components/SpriteComponent';
-import PositionComponent from '../components/PositionComponent';
 
 class SpriteSystem extends System {
   public override Render(ctx: CanvasRenderingContext2D, entities: Entity[]): void {
     for (const entity of entities) {
       const sprite = entity.GetComponent(SpriteComponent);
-      const position = entity.GetComponent(PositionComponent)?.position;
 
-      if (!sprite || !position) continue;
+      if (!sprite) continue;
+
+      const position = entity.GetWorldPosition();
 
       const image = AssetManager.GetImage(sprite.imageKey);
 

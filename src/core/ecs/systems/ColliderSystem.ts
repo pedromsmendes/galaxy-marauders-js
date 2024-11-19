@@ -4,7 +4,6 @@ import type { Bounds, Collision } from '../../types';
 
 import Entity from '../Entity';
 import System from '../System';
-import PositionComponent from '../components/PositionComponent';
 import ColliderComponent from '../components/ColliderComponent';
 
 class ColliderSystem extends System {
@@ -26,7 +25,7 @@ class ColliderSystem extends System {
     const validEntities: Entity[] = [];
 
     for (const entity of entities) {
-      const position = entity.GetComponent(PositionComponent)?.position;
+      const position = entity.GetWorldPosition();
       const collider = entity.GetComponent(ColliderComponent);
 
       if (!position || !collider) continue;
@@ -40,14 +39,14 @@ class ColliderSystem extends System {
     }
 
     for (const entity of validEntities) {
-      const position = entity.GetComponent(PositionComponent)!.position;
+      const position = entity.GetWorldPosition();
       const collider = entity.GetComponent(ColliderComponent)!;
 
       const neighbours = this.GetNeighbours(collider, position);
 
       for (const neighbourCollider of neighbours) {
         const bounds = this.GetBounds(collider, position);
-        const neighbourBounds = this.GetBounds(neighbourCollider, neighbourCollider.entity.GetComponent(PositionComponent)!.position);
+        const neighbourBounds = this.GetBounds(neighbourCollider, neighbourCollider.entity.GetWorldPosition());
 
         if ((collider.masks & neighbourCollider.layers) === 0 || (neighbourCollider.masks & collider.layers) === 0) {
           continue;
@@ -154,7 +153,7 @@ class ColliderSystem extends System {
     // // go over each collider and render it's colliderbox
     // this.grid.forEach((colliders) => {
     //   colliders.forEach((collider) => {
-    //     const pos = collider.entity.GetComponent(PositionComponent)!.position;
+    //     const pos = collider.entity.GetWorldPosition();
 
     //     const bounds = this.GetBounds(collider, pos);
 

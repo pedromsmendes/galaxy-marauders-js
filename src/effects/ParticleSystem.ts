@@ -1,19 +1,15 @@
-import type Entity from '@/core/ecs/Entity';
-
 import Vec2 from '@/core/utils/Vec2';
+import Transform from '@/core/utils/Transform';
 import { drawCircle } from '@/core/utils/DrawUtils';
 import { interpolateColor } from '@/core/utils/ColorUtils';
 import { mapRange, randRangeFloat } from '@/core/utils/MathUtils';
-import PositionComponent from '@/core/ecs/components/PositionComponent';
 import { EmissionShape, type Emission, type ParticleParams } from '@/core/types';
 
 import Particle from './Particle';
 
-class ParticleSystem {
-  private position: Vec2;
+class ParticleSystem extends Transform {
   private emission: Emission;
   private particleParams: ParticleParams;
-  private parent?: Entity;
 
   private particles: Particle[];
   private pool: Particle[];
@@ -21,13 +17,13 @@ class ParticleSystem {
   private timeSinceEmission = 0;
 
   /**
-   *
    * @param position The initial system position
    * @param maxParticles Max particles the system will deal with
    * @param particleParams
    */
   constructor(position: Vec2, emission: Emission, particleParams: ParticleParams) {
-    this.position = position;
+    super(position);
+
     this.emission = emission;
     this.particleParams = particleParams;
 
@@ -48,19 +44,8 @@ class ParticleSystem {
     this.active = false;
   }
 
-  public SetParent(parent?: Entity): void {
-    this.parent = parent;
-  }
-
   public Update(dt: number): void {
     if (!this.active) return;
-
-    if (this.parent) {
-      const parentPos = this.parent.GetComponent(PositionComponent)?.position;
-      if (parentPos) {
-        this.position = parentPos.Clone();
-      }
-    }
 
     if (!this.emission.rate) return;
 
@@ -147,7 +132,7 @@ class ParticleSystem {
         );
 
       case EmissionShape.Rectangle:
-        return this.position.Clone().Add(
+        return this.GetWorldPosition().Add(
           new Vec2(
             (Math.random() - 0.5) * this.emission.width,
             (Math.random() - 0.5) * this.emission.height,
@@ -158,7 +143,7 @@ class ParticleSystem {
       case EmissionShape.Circle:
       case EmissionShape.Point:
       default: {
-        return this.position.Clone();
+        return this.GetWorldPosition();
       }
     }
   }

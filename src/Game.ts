@@ -13,7 +13,7 @@ import HealthSystem from './core/ecs/systems/HealthSystem';
 import SpriteSystem from './core/ecs/systems/SpriteSystem';
 import ColliderSystem from './core/ecs/systems/ColliderSystem';
 import LifetimeSystem from './core/ecs/systems/LifetimeSystem';
-import MovementSystem from './core/ecs/systems/MovementSystem';
+import VelocitySystem from './core/ecs/systems/VelocitySystem';
 
 class Game {
   private systems: System[] = [];
@@ -30,7 +30,7 @@ class Game {
         new GUIManager();
 
         this.systems.push(
-          new MovementSystem(),
+          new VelocitySystem(),
           new HealthSystem(),
           new DashSystem(),
           new ShootSystem(this),

@@ -12,7 +12,7 @@ class LifetimeSystem extends System {
       lifetimeComponent.age += dt;
 
       if (lifetimeComponent.age >= lifetimeComponent.lifetime) {
-        lifetimeComponent.entity.Clear();
+        lifetimeComponent.entity.Destroy();
       }
     }
   }

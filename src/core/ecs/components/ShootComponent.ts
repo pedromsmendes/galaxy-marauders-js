@@ -35,7 +35,7 @@ class ShootComponent extends Component {
     projectile: EntityClass,
     projectileSpeed: number,
     cooldown: number,
-    projectileLifetime: number = 3,
+    projectileLifetime: number = 1,
   ) {
     super(entity);
 

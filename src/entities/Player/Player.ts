@@ -6,7 +6,6 @@ import DashComponent from '@/core/ecs/components/DashComponent';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
 import SpriteComponent from '@/core/ecs/components/SpriteComponent';
-import PositionComponent from '@/core/ecs/components/PositionComponent';
 import VelocityComponent from '@/core/ecs/components/VelocityComponent';
 import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderComponent';
 
@@ -20,7 +19,9 @@ class Player extends Entity {
   private trails: Trails;
 
   constructor() {
-    super();
+    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 250);
+
+    super(initialPos);
 
     const size = new Vec2(100, 84);
 
@@ -35,15 +36,12 @@ class Player extends Entity {
     healthComponent.OnDeath.Connect(this.OnDeath.bind(this));
     colliderComponent.OnCollisionEnter.Connect(this.OnCollisionEnter.bind(this));
 
-    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 250);
-
     this.AddComponents(
-      new PositionComponent(this, initialPos),
       new VelocityComponent(this),
       healthComponent,
       colliderComponent,
       new DashComponent(this, 1800, 0.2, 0.8),
-      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.05),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.3, 1),
       new SpriteComponent(this, 'Ship'),
     );
 
@@ -56,9 +54,8 @@ class Player extends Entity {
   }
 
   public override Update(dt: number): void {
-    const positionComponent = this.GetComponent(PositionComponent);
     const velocityComponent = this.GetComponent(VelocityComponent);
-    if (!positionComponent || !velocityComponent) return;
+    if (!velocityComponent) return;
 
     const dashComponent = this.GetComponent(DashComponent);
     if (dashComponent) {
@@ -90,7 +87,8 @@ class Player extends Entity {
     const shootComponent = this.GetComponent(ShootComponent);
     if (shootComponent) {
       if (InputManager.mouseButtonDown[0]) {
-        shootComponent.Shoot(new Vec2(positionComponent.position.x,));
+        const position = this.GetWorldPosition();
+        shootComponent.Shoot(new Vec2(position.x, 1));
       }
     }
 
@@ -108,7 +106,7 @@ class Player extends Entity {
   }
 
   private OnDeath(): void {
-    this.Clear();
+    this.Destroy();
   }
 }
 

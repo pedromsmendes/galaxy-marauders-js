@@ -3,7 +3,6 @@ import Vec2 from '@/core/utils/Vec2';
 import Entity from '../Entity';
 import System from '../System';
 import DashComponent from '../components/DashComponent';
-import PositionComponent from '../components/PositionComponent';
 import VelocityComponent from '../components/VelocityComponent';
 
 class DashSystem extends System {
@@ -11,9 +10,8 @@ class DashSystem extends System {
     for (const entity of entities) {
       const dashComponent = entity.GetComponent(DashComponent);
       const velComponent = entity.GetComponent(VelocityComponent);
-      const posComponent = entity.GetComponent(PositionComponent);
 
-      if (!dashComponent || !velComponent || !posComponent) continue;
+      if (!dashComponent || !velComponent) continue;
 
       dashComponent.TickCooldown(dt);
 

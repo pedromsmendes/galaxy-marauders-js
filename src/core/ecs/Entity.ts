@@ -2,21 +2,25 @@ import Component from '@/core/ecs/Component';
 
 import type { ComponentClass } from '../types';
 
-abstract class Entity {
+import Vec2 from '../utils/Vec2';
+import Transform from '../utils/Transform';
+
+abstract class Entity extends Transform {
   private static LATEST_ID = 0;
-  private static get NewId() { return ++Entity.LATEST_ID; }
 
-  public static get LatestId() { return Entity.LATEST_ID; }
-
-  private components: Map<Function, Component>;
-  private toClear = false;
+  private static GenerateNewId(): number {
+    return ++Entity.LATEST_ID;
+  }
 
   public readonly ID: number;
+  private components: Map<Function, Component>;
+  private isDestroyed = false;
 
+  constructor(position: Vec2, parent?: Transform) {
+    super(position, parent);
 
-  constructor() {
     this.components = new Map();
-    this.ID = Entity.NewId;
+    this.ID = Entity.GenerateNewId();
   }
 
   public Update(_dt: number): void { };
@@ -44,12 +48,13 @@ abstract class Entity {
     return this.components.has(componentClass);
   }
 
-  public Clear(): void {
-    this.toClear = true;
+  /** Marks entity for deletion */
+  public Destroy(): void {
+    this.isDestroyed = true;
   }
 
-  public ShouldClear() {
-    return this.toClear;
+  public ShouldClear(): boolean {
+    return this.isDestroyed;
   }
 }
 
