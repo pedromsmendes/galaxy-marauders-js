@@ -22,8 +22,8 @@ class ColliderComponent extends Component {
   public currentCollisions: Collision[] = [];
   public previousCollisions: Collision[] = [];
 
-  public OnCollisionEnter = new Signal<Collision>;
-  public OnCollisionExit = new Signal<Collision>;
+  public OnCollisionEnter = new Signal<Collision>();
+  public OnCollisionExit = new Signal<Collision>();
 
   constructor(parent: Entity, size: Vec2, layers: Layers, masks: Layers) {
     super(parent);

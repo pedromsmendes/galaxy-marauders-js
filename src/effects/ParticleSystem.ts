@@ -44,6 +44,25 @@ class ParticleSystem extends Transform {
     this.active = false;
   }
 
+  public SetEmission(newEmission: Partial<Emission>): void {
+    this.emission = {
+      maxParticles: newEmission.maxParticles ?? this.emission.maxParticles,
+      rate: newEmission.rate ?? this.emission.rate,
+      shape: newEmission.shape ?? this.emission.shape,
+      offset: newEmission.offset ?? this.emission.offset,
+      // @ts-expect-error Shape stuff
+      end: newEmission.end ?? this.emission.end,
+      // @ts-expect-error Shape stuff
+      height: newEmission.height ?? this.emission.height,
+      // @ts-expect-error Shape stuff
+      radius: newEmission.radius ?? this.emission.radius,
+      // @ts-expect-error Shape stuff
+      start: newEmission.start ?? this.emission.start,
+      // @ts-expect-error Shape stuff
+      width: newEmission.width ?? this.emission.width,
+    };
+  }
+
   public Update(dt: number): void {
     if (!this.active) return;
 

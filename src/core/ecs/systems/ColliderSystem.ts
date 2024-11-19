@@ -135,21 +135,6 @@ class ColliderSystem extends System {
 
   // DEBUGGY
   public override Render(_ctx: CanvasRenderingContext2D, _entities: Entity[]): void {
-    // for (let x = 0; x <= window.innerWidth; x += this.cellSize) {
-    //   for (let y = 0; y <= window.innerHeight; y += this.cellSize) {
-    //     ctx.strokeStyle = "#ffffff99";
-    //     ctx.strokeRect(x, y, this.cellSize, this.cellSize);
-
-    //     const centerOfTheRect = this.GetCell(x + this.cellSize / 2, y + this.cellSize / 2).ToString();
-    //     const content = this.grid.get(centerOfTheRect);
-
-    //     if (content?.length) {
-    //       ctx.fillStyle = "#ff902210";
-    //       ctx.fillRect(x, y, this.cellSize, this.cellSize)
-    //     }
-    //   }
-    // }
-
     // // go over each collider and render it's colliderbox
     // this.grid.forEach((colliders) => {
     //   colliders.forEach((collider) => {

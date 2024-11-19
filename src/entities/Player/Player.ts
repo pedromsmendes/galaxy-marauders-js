@@ -2,6 +2,7 @@ import Vec2 from '@/core/utils/Vec2';
 import Entity from '@/core/ecs/Entity';
 import { Collision } from '@/core/types';
 import InputManager from '@/managers/InputManager';
+import ScreenManager from '@/managers/ScreenManager';
 import DashComponent from '@/core/ecs/components/DashComponent';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
@@ -19,7 +20,7 @@ class Player extends Entity {
   private trails: Trails;
 
   constructor() {
-    const initialPos = new Vec2(window.innerWidth / 2, window.innerHeight - 250);
+    const initialPos = new Vec2(ScreenManager.Instance.Width / 2, ScreenManager.Instance.Height - 250);
 
     super(initialPos);
 
