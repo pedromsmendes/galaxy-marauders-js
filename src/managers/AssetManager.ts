@@ -1,9 +1,21 @@
 import shipFile from "@/assets/images/ship.png";
 import algaeFile from "@/assets/images/algae.png";
 
+/* PLANET IMAGES */
+import cosmosIce from "@/assets/images/cosmos/Ice.png";
+import cosmosLava from "@/assets/images/cosmos/Lava.png";
+import cosmosBaren from "@/assets/images/cosmos/Baren.png";
+import cosmosTerran from "@/assets/images/cosmos/Terran.png";
+import cosmosBlackHole from "@/assets/images/cosmos/BlackHole.png";
+
 export const ImageAsset = {
   Ship: shipFile,
   Algae: algaeFile,
+  CosmosIce: cosmosIce,
+  CosmosLava: cosmosLava,
+  CosmosBaren: cosmosBaren,
+  CosmosTerran: cosmosTerran,
+  CosmosBlackHole: cosmosBlackHole,
 }
 
 export type ImageAssetKey = keyof typeof ImageAsset;
