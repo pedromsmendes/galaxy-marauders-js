@@ -40,6 +40,7 @@ export default [
           "argsIgnorePattern": "^_"  // Ignore function arguments starting with '_'
         }
       ],
+      "@typescript-eslint/no-explicit-any": 0,
     },
   },
 ];

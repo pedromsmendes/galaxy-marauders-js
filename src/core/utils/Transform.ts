@@ -5,7 +5,7 @@ class Transform {
   private parent?: Transform;
   private children: Transform[];
 
-  constructor(localPos: Vec2, parent?: Transform) {
+  constructor(localPos = Vec2.Zero, parent?: Transform) {
     this.position = localPos;
 
     this.parent = parent;

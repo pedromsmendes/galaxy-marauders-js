@@ -3,6 +3,7 @@ import Entity from '@/core/ecs/Entity';
 import { Collision } from '@/core/types';
 import InputManager from '@/managers/InputManager';
 import ScreenManager from '@/managers/ScreenManager';
+import StateMachine from '@/core/stateMachine/StateMachine';
 import DashComponent from '@/core/ecs/components/DashComponent';
 import ShootComponent from '@/core/ecs/components/ShootComponent';
 import HealthComponent from '@/core/ecs/components/HealthComponent';
@@ -12,6 +13,12 @@ import ColliderComponent, { Layers } from '@/core/ecs/components/ColliderCompone
 
 import Trails from './Trails';
 import ProjectileTest from '../ProjectileTest';
+import { StateTest1, StateTest2 } from './StateTest';
+
+export enum PlayerStates {
+  StateTest1 = "StateTest1",
+  StateTest2 = "StateTest2",
+}
 
 class Player extends Entity {
   /** px/sec */
@@ -19,10 +26,10 @@ class Player extends Entity {
 
   private trails: Trails;
 
-  constructor() {
-    const initialPos = new Vec2(ScreenManager.Instance.Width / 2, ScreenManager.Instance.Height - 250);
+  private stateMachine: StateMachine<PlayerStates>;
 
-    super(initialPos);
+  constructor() {
+    super(new Vec2(ScreenManager.Instance.Width / 2, ScreenManager.Instance.Height - 100));
 
     const size = new Vec2(100, 84);
 
@@ -42,7 +49,7 @@ class Player extends Entity {
       healthComponent,
       colliderComponent,
       new DashComponent(this, 1800, 0.2, 0.8),
-      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.3, 1),
+      new ShootComponent(this, Vec2.Zero, ProjectileTest, 1500, 0.2, 1),
       new SpriteComponent(this, 'Ship'),
     );
 
@@ -52,9 +59,14 @@ class Player extends Entity {
       new Vec2(-35, 5),
       new Vec2(35, 5),
     );
+
+    this.stateMachine = new StateMachine(PlayerStates.StateTest1, [StateTest1, StateTest2]);
+    this.stateMachine.Start();
   }
 
   public override Update(dt: number): void {
+    this.stateMachine.Update(dt);
+
     const velocityComponent = this.GetComponent(VelocityComponent);
     if (!velocityComponent) return;
 

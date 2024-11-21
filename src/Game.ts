@@ -1,3 +1,5 @@
+import Enemy from './entities/Enemy';
+import Vec2 from './core/utils/Vec2';
 import Background from './Background';
 import Entity from './core/ecs/Entity';
 import System from './core/ecs/System';
@@ -44,9 +46,9 @@ class Game {
         this.player = new Player();
         this.AddEntity(this.player)
 
-        // for (let i = 0; i < 5; i++) {
-        //   this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 100)))
-        // }
+        for (let i = 0; i < 5; i++) {
+          this.AddEntity(new Enemy(new Vec2((i * 200) + 100, 100)))
+        }
 
         startGame();
       })
